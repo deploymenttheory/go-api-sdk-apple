@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-mdm-sdk-apple/sdk/apple/devicemanagementprofiles/models"
+	"github.com/deploymenttheory/go-mdm-sdk-apple/sdk/apple/devicemanagementprofiles/security/models"
 	"howett.net/plist"
 )
 
