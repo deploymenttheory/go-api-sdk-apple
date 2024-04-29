@@ -41,24 +41,24 @@ Profile Example:
 */
 package models
 
-// ResourceSecurityPreferencesConfigurationProfile defines the structure for managing passcode policies on devices.
-type ResourceSecurityPreferencesConfigurationProfile struct {
-	Version                  string                                                 `plist:"version,attr"`
-	PayloadContent           []SecurityPreferencesConfigurationProfileSubsetPayload `plist:"PayloadContent"`
-	PayloadDescription       string                                                 `plist:"PayloadDescription,omitempty"`
-	PayloadDisplayName       string                                                 `plist:"PayloadDisplayName,omitempty"`
-	PayloadEnabled           string                                                 `plist:"PayloadEnabled,omitempty"`
-	PayloadIdentifier        string                                                 `plist:"PayloadIdentifier,omitempty"`
-	PayloadOrganization      string                                                 `plist:"PayloadOrganization,omitempty"`
-	PayloadRemovalDisallowed string                                                 `plist:"PayloadRemovalDisallowed,omitempty"`
-	PayloadScope             string                                                 `plist:"PayloadScope,omitempty"`
-	PayloadType              string                                                 `plist:"PayloadType,omitempty"`
-	PayloadUUID              string                                                 `plist:"PayloadUUID,omitempty"`
-	PayloadVersion           int                                                    `plist:"PayloadVersion,omitempty"`
+// ResourceSecurityPreferencesDeviceManagementProfile defines the structure for managing passcode policies on devices.
+type ResourceSecurityPreferencesDeviceManagementProfile struct {
+	Version                  string                                                    `plist:"version,attr"`
+	PayloadContent           []SecurityPreferencesDeviceManagementProfileSubsetPayload `plist:"PayloadContent"`
+	PayloadDescription       string                                                    `plist:"PayloadDescription,omitempty"`
+	PayloadDisplayName       string                                                    `plist:"PayloadDisplayName,omitempty"`
+	PayloadEnabled           string                                                    `plist:"PayloadEnabled,omitempty"`
+	PayloadIdentifier        string                                                    `plist:"PayloadIdentifier,omitempty"`
+	PayloadOrganization      string                                                    `plist:"PayloadOrganization,omitempty"`
+	PayloadRemovalDisallowed string                                                    `plist:"PayloadRemovalDisallowed,omitempty"`
+	PayloadScope             string                                                    `plist:"PayloadScope,omitempty"`
+	PayloadType              string                                                    `plist:"PayloadType,omitempty"`
+	PayloadUUID              string                                                    `plist:"PayloadUUID,omitempty"`
+	PayloadVersion           int                                                       `plist:"PayloadVersion,omitempty"`
 }
 
-// SecurityPreferencesConfigurationProfileSubsetPayload represents the specific security preferences set in the policy.
-type SecurityPreferencesConfigurationProfileSubsetPayload struct {
+// SecurityPreferencesDeviceManagementProfileSubsetPayload represents the specific security preferences set in the policy.
+type SecurityPreferencesDeviceManagementProfileSubsetPayload struct {
 	DontAllowFireWallUI      *bool  `plist:"dontAllowFireWallUI"`
 	DontAllowLockMessageUI   *bool  `plist:"dontAllowLockMessageUI"`
 	DontAllowPasswordResetUI *bool  `plist:"dontAllowPasswordResetUI"`

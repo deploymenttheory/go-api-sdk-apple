@@ -1,12 +1,13 @@
 /*
 Device Management Profile: Passcode
-Version: 	iOS 4.0+
-
-	iPadOS 4.0+
-	macOS 10.7+
-	watchOS 10.0+
+Version:
+  - iOS 4.0+
+  - iPadOS 4.0+
+  - macOS 10.7+
+  - watchOS 10.0+
 
 Ref: 			https://developer.apple.com/documentation/devicemanagement/passcode
+
 Profile Example:
 
 <?xml version=”1.0” encoding=”UTF-8”?>
@@ -61,24 +62,24 @@ Profile Example:
 */
 package models
 
-// ResourcePasscodeConfigurationProfile defines the structure for managing passcode policies on devices.
-type ResourcePasscodeConfigurationProfile struct {
-	Version                  string                                      `plist:"version,attr"`
-	PayloadContent           []PasscodeConfigurationProfileSubsetPayload `plist:"PayloadContent"`
-	PayloadDescription       string                                      `plist:"PayloadDescription,omitempty"`
-	PayloadDisplayName       string                                      `plist:"PayloadDisplayName,omitempty"`
-	PayloadEnabled           string                                      `plist:"PayloadEnabled,omitempty"`
-	PayloadIdentifier        string                                      `plist:"PayloadIdentifier,omitempty"`
-	PayloadOrganization      string                                      `plist:"PayloadOrganization,omitempty"`
-	PayloadRemovalDisallowed string                                      `plist:"PayloadRemovalDisallowed,omitempty"`
-	PayloadScope             string                                      `plist:"PayloadScope,omitempty"`
-	PayloadType              string                                      `plist:"PayloadType,omitempty"`
-	PayloadUUID              string                                      `plist:"PayloadUUID,omitempty"`
-	PayloadVersion           int                                         `plist:"PayloadVersion,omitempty"`
+// ResourcePasscodeDeviceManagementProfile defines the structure for managing passcode policies on devices.
+type ResourcePasscodeDeviceManagementProfile struct {
+	Version                  string                                         `plist:"version,attr"`
+	PayloadContent           []PasscodeDeviceManagementProfileSubsetPayload `plist:"PayloadContent"`
+	PayloadDescription       string                                         `plist:"PayloadDescription,omitempty"`
+	PayloadDisplayName       string                                         `plist:"PayloadDisplayName,omitempty"`
+	PayloadEnabled           string                                         `plist:"PayloadEnabled,omitempty"`
+	PayloadIdentifier        string                                         `plist:"PayloadIdentifier,omitempty"`
+	PayloadOrganization      string                                         `plist:"PayloadOrganization,omitempty"`
+	PayloadRemovalDisallowed string                                         `plist:"PayloadRemovalDisallowed,omitempty"`
+	PayloadScope             string                                         `plist:"PayloadScope,omitempty"`
+	PayloadType              string                                         `plist:"PayloadType,omitempty"`
+	PayloadUUID              string                                         `plist:"PayloadUUID,omitempty"`
+	PayloadVersion           int                                            `plist:"PayloadVersion,omitempty"`
 }
 
-// PasscodeConfigurationProfileSubsetPayload represents the passcode requirements set in the policy.
-type PasscodeConfigurationProfileSubsetPayload struct {
+// PasscodeDeviceManagementProfileSubsetPayload represents the passcode requirements set in the policy.
+type PasscodeDeviceManagementProfileSubsetPayload struct {
 	AllowSimple         *bool        `plist:"allowSimple"`
 	ForcePIN            *bool        `plist:"forcePIN"`
 	MaxFailedAttempts   int          `plist:"maxFailedAttempts"`

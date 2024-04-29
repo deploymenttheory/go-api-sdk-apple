@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-api-sdk-jamfpro/sdk/apple/devicemanagementprofiles/models"
+	"github.com/deploymenttheory/go-mdm-sdk-apple/sdk/apple/devicemanagementprofiles/models"
 	"howett.net/plist"
 )
 
@@ -54,13 +54,13 @@ func main() {
 	fmt.Println("File successfully written to", filePath)
 }
 
-// CreateSecurityPreferencesConfig initializes and returns a ResourceSecurityPreferencesConfigurationProfile with predefined values.
-func CreateSecurityPreferencesConfig() models.ResourceSecurityPreferencesConfigurationProfile {
+// CreateSecurityPreferencesConfig initializes and returns a ResourceSecurityPreferencesDeviceManagementProfile with predefined values.
+func CreateSecurityPreferencesConfig() models.ResourceSecurityPreferencesDeviceManagementProfile {
 	trueVal := true
 	falseVal := false
-	return models.ResourceSecurityPreferencesConfigurationProfile{
+	return models.ResourceSecurityPreferencesDeviceManagementProfile{
 		Version: "1.0",
-		PayloadContent: []models.SecurityPreferencesConfigurationProfileSubsetPayload{
+		PayloadContent: []models.SecurityPreferencesDeviceManagementProfileSubsetPayload{
 			{
 				DontAllowFireWallUI:      &trueVal,
 				DontAllowLockMessageUI:   &falseVal,

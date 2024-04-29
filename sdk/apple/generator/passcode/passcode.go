@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-api-sdk-jamfpro/sdk/apple/devicemanagementprofiles/models"
+	"github.com/deploymenttheory/go-mdm-sdk-apple/sdk/apple/devicemanagementprofiles/models"
 	"howett.net/plist"
 )
 
@@ -54,8 +54,8 @@ func main() {
 	fmt.Println("File successfully written to", filePath)
 }
 
-// CreatePasscodeConfig initializes and returns a ResourcePasscodeConfigurationProfile with sample data.
-func CreatePasscodeConfig() models.ResourcePasscodeConfigurationProfile {
+// CreatePasscodeConfig initializes and returns a ResourcePasscodeDeviceManagementProfile with sample data.
+func CreatePasscodeConfig() models.ResourcePasscodeDeviceManagementProfile {
 	trueVal := true
 	falseVal := false
 	descriptions := []models.Description{
@@ -66,9 +66,9 @@ func CreatePasscodeConfig() models.ResourcePasscodeConfigurationProfile {
 		// Add more descriptions for other locales as needed
 	}
 
-	return models.ResourcePasscodeConfigurationProfile{
+	return models.ResourcePasscodeDeviceManagementProfile{
 		Version: "1.0",
-		PayloadContent: []models.PasscodeConfigurationProfileSubsetPayload{
+		PayloadContent: []models.PasscodeDeviceManagementProfileSubsetPayload{
 			{
 				AllowSimple:         &trueVal,
 				ForcePIN:            &trueVal,
