@@ -62,24 +62,24 @@ Profile Example:
 */
 package models
 
-// ResourcePasscodeDeviceManagementProfile defines the structure for managing passcode policies on devices.
-type ResourcePasscodeDeviceManagementProfile struct {
-	Version                  string                                         `plist:"version,attr"`
-	PayloadContent           []PasscodeDeviceManagementProfileSubsetPayload `plist:"PayloadContent"`
-	PayloadDescription       string                                         `plist:"PayloadDescription,omitempty"`
-	PayloadDisplayName       string                                         `plist:"PayloadDisplayName,omitempty"`
-	PayloadEnabled           string                                         `plist:"PayloadEnabled,omitempty"`
-	PayloadIdentifier        string                                         `plist:"PayloadIdentifier,omitempty"`
-	PayloadOrganization      string                                         `plist:"PayloadOrganization,omitempty"`
-	PayloadRemovalDisallowed string                                         `plist:"PayloadRemovalDisallowed,omitempty"`
-	PayloadScope             string                                         `plist:"PayloadScope,omitempty"`
-	PayloadType              string                                         `plist:"PayloadType,omitempty"`
-	PayloadUUID              string                                         `plist:"PayloadUUID,omitempty"`
-	PayloadVersion           int                                            `plist:"PayloadVersion,omitempty"`
+// ObjectPasscodeMobileDeviceManagementProfile defines the structure for managing passcode policies on devices.
+type ObjectPasscodeMobileDeviceManagementProfile struct {
+	Version                  string                                               `plist:"version,attr"`
+	PayloadContent           []PasscodeMobileDeviceManagementProfileSubsetPayload `plist:"PayloadContent"`
+	PayloadDescription       string                                               `plist:"PayloadDescription,omitempty"`
+	PayloadDisplayName       string                                               `plist:"PayloadDisplayName,omitempty"`
+	PayloadEnabled           string                                               `plist:"PayloadEnabled,omitempty"`
+	PayloadIdentifier        string                                               `plist:"PayloadIdentifier,omitempty"`
+	PayloadOrganization      string                                               `plist:"PayloadOrganization,omitempty"`
+	PayloadRemovalDisallowed string                                               `plist:"PayloadRemovalDisallowed,omitempty"`
+	PayloadScope             string                                               `plist:"PayloadScope,omitempty"`
+	PayloadType              string                                               `plist:"PayloadType,omitempty"`
+	PayloadUUID              string                                               `plist:"PayloadUUID,omitempty"`
+	PayloadVersion           int                                                  `plist:"PayloadVersion,omitempty"`
 }
 
-// PasscodeDeviceManagementProfileSubsetPayload represents the passcode requirements set in the policy.
-type PasscodeDeviceManagementProfileSubsetPayload struct {
+// PasscodeMobileDeviceManagementProfileSubsetPayload represents the passcode requirements set in the policy.
+type PasscodeMobileDeviceManagementProfileSubsetPayload struct {
 	AllowSimple         *bool        `plist:"allowSimple"`
 	ForcePIN            *bool        `plist:"forcePIN"`
 	MaxFailedAttempts   int          `plist:"maxFailedAttempts"`

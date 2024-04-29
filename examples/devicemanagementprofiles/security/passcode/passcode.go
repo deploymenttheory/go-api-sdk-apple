@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/examples/helpers"
-	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/devicemanagementprofiles/security/generate"
+	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/mobiledevicemanagementprofiles/security/generate"
 
 	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/serialize"
 )
@@ -16,7 +16,7 @@ import (
 func main() {
 	options := GeneratePasscodeProfile()
 
-	passcodeProfile := generate.CreatePasscodeDeviceManagementProfile(options)
+	passcodeProfile := generate.CreatePasscodeMobileDeviceManagementProfile(options)
 
 	// Serialize the profile to plist in XML format
 	profileXML, err := serialize.SerializeDeviceManagementProfileToPLIST(passcodeProfile)
@@ -50,8 +50,8 @@ func main() {
 }
 
 // GeneratePasscodeProfile generates a passcode profile with the provided options.
-func GeneratePasscodeProfile() generate.PasscodeDeviceManagementProfileConfigOptions {
-	return generate.PasscodeDeviceManagementProfileConfigOptions{
+func GeneratePasscodeProfile() generate.PasscodeMobileDeviceManagementProfileConfigOptions {
+	return generate.PasscodeMobileDeviceManagementProfileConfigOptions{
 		PayloadDisplayName:  "passcode",
 		AllowSimple:         true,
 		ForcePIN:            true,

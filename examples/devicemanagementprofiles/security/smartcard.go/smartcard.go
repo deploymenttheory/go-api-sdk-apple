@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/examples/helpers"
-	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/devicemanagementprofiles/security/generate"
+	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/mobiledevicemanagementprofiles/security/generate"
 
 	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/serialize"
 )
@@ -15,7 +15,7 @@ import (
 func main() {
 	options := CreateSmartCardProfile()
 
-	passcodeProfile := generate.CreateSmartCardDeviceManagementProfile(options)
+	passcodeProfile := generate.CreateSmartCardMobileDeviceManagementProfile(options)
 
 	// Serialize the profile to plist in XML format
 	profileXML, err := serialize.SerializeDeviceManagementProfileToPLIST(passcodeProfile)
@@ -49,8 +49,8 @@ func main() {
 }
 
 // CreateSmartCardProfile generates a profile with the provided options.
-func CreateSmartCardProfile() generate.SmartCardDeviceManagementProfileConfigOptions {
-	return generate.SmartCardDeviceManagementProfileConfigOptions{
+func CreateSmartCardProfile() generate.SmartCardMobileDeviceManagementProfileConfigOptions {
+	return generate.SmartCardMobileDeviceManagementProfileConfigOptions{
 		PayloadDisplayName:    "smartcard",
 		UserPairing:           true,
 		AllowSmartCard:        true,

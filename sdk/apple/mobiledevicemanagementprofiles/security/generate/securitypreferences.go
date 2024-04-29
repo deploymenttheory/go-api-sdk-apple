@@ -1,23 +1,23 @@
 package generate
 
 import (
-	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/devicemanagementprofiles/security/models"
+	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/mobiledevicemanagementprofiles/security/models"
 	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/helpers"
 )
 
-// SecurityPreferencesDeviceManagementProfileConfigOptions holds customizable options for the security preferences profile.
-type SecurityPreferencesDeviceManagementProfileConfigOptions struct {
+// SecurityPreferencesMobileDeviceManagementProfileConfigOptions holds customizable options for the security preferences profile.
+type SecurityPreferencesMobileDeviceManagementProfileConfigOptions struct {
 	PayloadDisplayName       string
 	DontAllowFireWallUI      bool
 	DontAllowLockMessageUI   bool
 	DontAllowPasswordResetUI bool
 }
 
-// CreateSecurityPreferencesDeviceManagementProfile creates a device management profile for security preferences using provided configuration options.
-func CreateSecurityPreferencesDeviceManagementProfile(options SecurityPreferencesDeviceManagementProfileConfigOptions) models.ResourceSecurityPreferencesDeviceManagementProfile {
-	return models.ResourceSecurityPreferencesDeviceManagementProfile{
+// CreateSecurityPreferencesMobileDeviceManagementProfile creates a device management profile for security preferences using provided configuration options.
+func CreateSecurityPreferencesMobileDeviceManagementProfile(options SecurityPreferencesMobileDeviceManagementProfileConfigOptions) models.ObjectSecurityPreferencesMobileDeviceManagementProfile {
+	return models.ObjectSecurityPreferencesMobileDeviceManagementProfile{
 		Version: "1.0",
-		PayloadContent: []models.SecurityPreferencesDeviceManagementProfileSubsetPayload{
+		PayloadContent: []models.SecurityPreferencesMobileDeviceManagementProfileSubsetPayload{
 			{
 				DontAllowFireWallUI:      &options.DontAllowFireWallUI,
 				DontAllowLockMessageUI:   &options.DontAllowLockMessageUI,

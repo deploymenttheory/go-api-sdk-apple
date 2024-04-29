@@ -1,12 +1,12 @@
 package generate
 
 import (
-	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/devicemanagementprofiles/security/models"
+	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/mobiledevicemanagementprofiles/security/models"
 	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/helpers"
 )
 
-// SmartCardDeviceManagementProfileConfigOptions holds customizable options for the smart card profile.
-type SmartCardDeviceManagementProfileConfigOptions struct {
+// SmartCardMobileDeviceManagementProfileConfigOptions holds customizable options for the smart card profile.
+type SmartCardMobileDeviceManagementProfileConfigOptions struct {
 	PayloadDisplayName    string
 	UserPairing           bool
 	AllowSmartCard        bool
@@ -16,11 +16,11 @@ type SmartCardDeviceManagementProfileConfigOptions struct {
 	EnforceSmartCard      bool
 }
 
-// CreateSmartCardDeviceManagementProfile creates a device management profile for smart card using provided configuration options.
-func CreateSmartCardDeviceManagementProfile(options SmartCardDeviceManagementProfileConfigOptions) models.ResourceSmartCardDeviceManagementProfile {
-	return models.ResourceSmartCardDeviceManagementProfile{
+// CreateSmartCardMobileDeviceManagementProfile creates a device management profile for smart card using provided configuration options.
+func CreateSmartCardMobileDeviceManagementProfile(options SmartCardMobileDeviceManagementProfileConfigOptions) models.ObjectSmartCardMobileDeviceManagementProfile {
+	return models.ObjectSmartCardMobileDeviceManagementProfile{
 		Version: "1.0",
-		PayloadContent: []models.SmartCardDeviceManagementProfileSubsetPayload{
+		PayloadContent: []models.SmartCardMobileDeviceManagementProfileSubsetPayload{
 			{
 				UserPairing:           &options.UserPairing,
 				AllowSmartCard:        &options.AllowSmartCard,

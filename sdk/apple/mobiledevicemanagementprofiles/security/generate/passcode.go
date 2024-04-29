@@ -1,13 +1,13 @@
 package generate
 
 import (
-	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/devicemanagementprofiles/security/models"
+	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/mobiledevicemanagementprofiles/security/models"
 
 	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/helpers"
 )
 
-// DeviceManagementProfileConfigOptions holds customizable options for the passcode profile.
-type PasscodeDeviceManagementProfileConfigOptions struct {
+// PasscodeDeviceMobileManagementProfileConfigOptions holds customizable options for the passcode profile.
+type PasscodeMobileDeviceManagementProfileConfigOptions struct {
 	PayloadDisplayName  string
 	AllowSimple         bool
 	ForcePIN            bool
@@ -21,15 +21,15 @@ type PasscodeDeviceManagementProfileConfigOptions struct {
 	CustomRegexPattern  string
 }
 
-// CreatePasscodeDeviceManagementProfile creates a device management profile for passcodes using provided configuration options.
-func CreatePasscodeDeviceManagementProfile(options PasscodeDeviceManagementProfileConfigOptions) models.ResourcePasscodeDeviceManagementProfile {
+// CreatePasscodeMobileDeviceManagementProfile creates a device management profile for passcodes using provided configuration options.
+func CreatePasscodeMobileDeviceManagementProfile(options PasscodeMobileDeviceManagementProfileConfigOptions) models.ObjectPasscodeMobileDeviceManagementProfile {
 	descriptions := []models.Description{
 		{Locale: "en-US", Description: "Passcode must meet complexity requirements."},
 	}
 
-	return models.ResourcePasscodeDeviceManagementProfile{
+	return models.ObjectPasscodeMobileDeviceManagementProfile{
 		Version: "1.0",
-		PayloadContent: []models.PasscodeDeviceManagementProfileSubsetPayload{
+		PayloadContent: []models.PasscodeMobileDeviceManagementProfileSubsetPayload{
 			{
 				AllowSimple:         &options.AllowSimple,
 				ForcePIN:            &options.ForcePIN,

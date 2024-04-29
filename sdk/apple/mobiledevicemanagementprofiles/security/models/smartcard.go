@@ -51,24 +51,24 @@ Profile Example:
 */
 package models
 
-// ResourceSmartCardDeviceManagementProfile defines the structure for managing smart card configurations on devices.
-type ResourceSmartCardDeviceManagementProfile struct {
-	Version                  string                                          `plist:"version,attr"`
-	PayloadContent           []SmartCardDeviceManagementProfileSubsetPayload `plist:"PayloadContent"`
-	PayloadDescription       string                                          `plist:"PayloadDescription,omitempty"`
-	PayloadDisplayName       string                                          `plist:"PayloadDisplayName,omitempty"`
-	PayloadEnabled           string                                          `plist:"PayloadEnabled,omitempty"`
-	PayloadIdentifier        string                                          `plist:"PayloadIdentifier,omitempty"`
-	PayloadOrganization      string                                          `plist:"PayloadOrganization,omitempty"`
-	PayloadRemovalDisallowed string                                          `plist:"PayloadRemovalDisallowed,omitempty"`
-	PayloadScope             string                                          `plist:"PayloadScope,omitempty"`
-	PayloadType              string                                          `plist:"PayloadType,omitempty"`
-	PayloadUUID              string                                          `plist:"PayloadUUID,omitempty"`
-	PayloadVersion           int                                             `plist:"PayloadVersion,omitempty"`
+// RObjectSmartCardMobileDeviceManagementProfile defines the structure for managing smart card configurations on devices.
+type ObjectSmartCardMobileDeviceManagementProfile struct {
+	Version                  string                                                `plist:"version,attr"`
+	PayloadContent           []SmartCardMobileDeviceManagementProfileSubsetPayload `plist:"PayloadContent"`
+	PayloadDescription       string                                                `plist:"PayloadDescription,omitempty"`
+	PayloadDisplayName       string                                                `plist:"PayloadDisplayName,omitempty"`
+	PayloadEnabled           string                                                `plist:"PayloadEnabled,omitempty"`
+	PayloadIdentifier        string                                                `plist:"PayloadIdentifier,omitempty"`
+	PayloadOrganization      string                                                `plist:"PayloadOrganization,omitempty"`
+	PayloadRemovalDisallowed string                                                `plist:"PayloadRemovalDisallowed,omitempty"`
+	PayloadScope             string                                                `plist:"PayloadScope,omitempty"`
+	PayloadType              string                                                `plist:"PayloadType,omitempty"`
+	PayloadUUID              string                                                `plist:"PayloadUUID,omitempty"`
+	PayloadVersion           int                                                   `plist:"PayloadVersion,omitempty"`
 }
 
-// SmartCardDeviceManagementProfileSubsetPayload represents the smart card specific settings in the profile.
-type SmartCardDeviceManagementProfileSubsetPayload struct {
+// SmartCardMobileDeviceManagementProfileSubsetPayload represents the smart card specific settings in the profile.
+type SmartCardMobileDeviceManagementProfileSubsetPayload struct {
 	AllowSmartCard        *bool  `plist:"allowSmartCard,omitempty"`
 	CheckCertificateTrust int    `plist:"checkCertificateTrust"`
 	EnforceSmartCard      *bool  `plist:"enforceSmartCard,omitempty"`
