@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>PayloadContent</key>
+        <array>
+            <dict>
+                <key>PayloadIdentifier</key>
+                <string>com.gomdmsdkapple.securitypreferencespayload</string>
+                <key>PayloadType</key>
+                <string>com.apple.preference.security</string>
+                <key>PayloadUUID</key>
+                <string>da179f44-69f6-021f-9a95-8d213eddeafd</string>
+                <key>PayloadVersion</key>
+                <integer>1</integer>
+                <key>dontAllowFireWallUI</key>
+                <true/>
+                <key>dontAllowLockMessageUI</key>
+                <false/>
+                <key>dontAllowPasswordResetUI</key>
+                <false/>
+            </dict>
+        </array>
+        <key>PayloadDisplayName</key>
+        <string>Security Preferences</string>
+        <key>PayloadIdentifier</key>
+        <string>com.gomdmsdkapple.securitypreferencespayload</string>
+        <key>PayloadType</key>
+        <string>Configuration</string>
+        <key>PayloadUUID</key>
+        <string>9cd18507-c26c-5a91-a8ab-5e8ac53ed779</string>
+        <key>PayloadVersion</key>
+        <integer>1</integer>
+        <key>version</key>
+        <string>1.0</string>
+    </dict>
+</plist>

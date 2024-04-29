@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>PayloadContent</key>
+        <array>
+            <dict>
+                <key>PayloadIdentifier</key>
+                <string>com.gomdmsdkapple.smartcardpayload</string>
+                <key>PayloadType</key>
+                <string>com.apple.security.smartcard</string>
+                <key>PayloadUUID</key>
+                <string>ae1a8a0f-9eb3-b387-ec10-e788ec597f31</string>
+                <key>PayloadVersion</key>
+                <integer>1</integer>
+                <key>UserPairing</key>
+                <true/>
+                <key>allowSmartCard</key>
+                <true/>
+                <key>checkCertificateTrust</key>
+                <integer>1</integer>
+                <key>enforceSmartCard</key>
+                <true/>
+                <key>oneCardPerUser</key>
+                <true/>
+                <key>tokenRemovalAction</key>
+                <integer>1</integer>
+            </dict>
+        </array>
+        <key>PayloadDisplayName</key>
+        <string>smartcard</string>
+        <key>PayloadIdentifier</key>
+        <string>com.gomdmsdkapple.smartcardpayload</string>
+        <key>PayloadType</key>
+        <string>Configuration</string>
+        <key>PayloadUUID</key>
+        <string>caa448a4-8fbf-9a94-b3dc-b66322e18fd6</string>
+        <key>PayloadVersion</key>
+        <integer>1</integer>
+        <key>version</key>
+        <string>1.0</string>
+    </dict>
+</plist>

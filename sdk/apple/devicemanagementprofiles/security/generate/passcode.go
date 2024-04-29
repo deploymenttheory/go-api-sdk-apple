@@ -7,7 +7,7 @@ import (
 )
 
 // DeviceManagementProfileConfigOptions holds customizable options for the passcode profile.
-type DeviceManagementProfileConfigOptions struct {
+type PasscodeDeviceManagementProfileConfigOptions struct {
 	PayloadDisplayName  string
 	AllowSimple         bool
 	ForcePIN            bool
@@ -22,7 +22,7 @@ type DeviceManagementProfileConfigOptions struct {
 }
 
 // CreatePasscodeDeviceManagementProfile creates a device management profile for passcodes using provided configuration options.
-func CreatePasscodeDeviceManagementProfile(options DeviceManagementProfileConfigOptions) models.ResourcePasscodeDeviceManagementProfile {
+func CreatePasscodeDeviceManagementProfile(options PasscodeDeviceManagementProfileConfigOptions) models.ResourcePasscodeDeviceManagementProfile {
 	descriptions := []models.Description{
 		{Locale: "en-US", Description: "Passcode must meet complexity requirements."},
 	}
