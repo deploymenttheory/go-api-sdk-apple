@@ -80,31 +80,17 @@ type ObjectPasscodeMobileDeviceManagementProfile struct {
 
 // PasscodeMobileDeviceManagementProfileSubsetPayload represents the passcode requirements set in the policy.
 type PasscodeMobileDeviceManagementProfileSubsetPayload struct {
-	AllowSimple         *bool        `plist:"allowSimple"`
-	ForcePIN            *bool        `plist:"forcePIN"`
-	MaxFailedAttempts   int          `plist:"maxFailedAttempts"`
-	MaxGracePeriod      int          `plist:"maxGracePeriod"`
-	MaxInactivity       int          `plist:"maxInactivity"`
-	MaxPINAgeInDays     int          `plist:"maxPINAgeInDays"`
-	MinLength           int          `plist:"minLength"`
-	PinHistory          int          `plist:"pinHistory"`
-	RequireAlphanumeric *bool        `plist:"requireAlphanumeric"`
-	PayloadIdentifier   string       `plist:"PayloadIdentifier"`
-	PayloadType         string       `plist:"PayloadType"`
-	PayloadUUID         string       `plist:"PayloadUUID"`
-	PayloadVersion      int          `plist:"PayloadVersion"`
-	CustomRegex         *CustomRegex `plist:"CustomRegex,omitempty"`
-}
-
-// CustomRegex defines the regular expression for password compliance.
-type CustomRegex struct {
-	PasswordContentDescriptions []Description `plist:"PasswordContentDescription"`
-	PasswordContentRegex        string        `plist:"PasswordContentRegex"`
-}
-
-// CustomRegex defines the regular expression for password compliance.
-// Description represents a single localized description entry.
-type Description struct {
-	Locale      string `plist:"locale,attr"`
-	Description string `plist:",chardata"`
+	AllowSimple         *bool  `plist:"allowSimple"`
+	ForcePIN            *bool  `plist:"forcePIN"`
+	MaxFailedAttempts   int    `plist:"maxFailedAttempts"`
+	MaxGracePeriod      int    `plist:"maxGracePeriod"`
+	MaxInactivity       int    `plist:"maxInactivity"`
+	MaxPINAgeInDays     int    `plist:"maxPINAgeInDays"`
+	MinLength           int    `plist:"minLength"`
+	PinHistory          int    `plist:"pinHistory"`
+	RequireAlphanumeric *bool  `plist:"requireAlphanumeric"`
+	PayloadIdentifier   string `plist:"PayloadIdentifier"`
+	PayloadType         string `plist:"PayloadType"`
+	PayloadUUID         string `plist:"PayloadUUID"`
+	PayloadVersion      int    `plist:"PayloadVersion"`
 }

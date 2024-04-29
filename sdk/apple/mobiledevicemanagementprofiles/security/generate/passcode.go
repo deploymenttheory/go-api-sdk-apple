@@ -23,10 +23,6 @@ type PasscodeMobileDeviceManagementProfileConfigOptions struct {
 
 // CreatePasscodeMobileDeviceManagementProfile creates a device management profile for passcodes using provided configuration options.
 func CreatePasscodeMobileDeviceManagementProfile(options PasscodeMobileDeviceManagementProfileConfigOptions) models.ObjectPasscodeMobileDeviceManagementProfile {
-	descriptions := []models.Description{
-		{Locale: "en-US", Description: "Passcode must meet complexity requirements."},
-	}
-
 	return models.ObjectPasscodeMobileDeviceManagementProfile{
 		Version: "1.0",
 		PayloadContent: []models.PasscodeMobileDeviceManagementProfileSubsetPayload{
@@ -44,10 +40,6 @@ func CreatePasscodeMobileDeviceManagementProfile(options PasscodeMobileDeviceMan
 				PayloadType:         "com.apple.mobiledevice.passwordpolicy",
 				PayloadUUID:         helpers.GenerateUUID(),
 				PayloadVersion:      1,
-				CustomRegex: &models.CustomRegex{
-					PasswordContentDescriptions: descriptions,
-					PasswordContentRegex:        options.CustomRegexPattern,
-				},
 			},
 		},
 		PayloadDisplayName: options.PayloadDisplayName,
