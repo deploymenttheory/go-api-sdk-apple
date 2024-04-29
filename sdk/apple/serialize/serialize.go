@@ -6,7 +6,7 @@ import (
 	"howett.net/plist"
 )
 
-// SerializeDeviceManagementProfileToPLIST converts a DeviceManagementProfile into an XML string.
+// SerializeDeviceManagementProfileToPLIST converts a DeviceManagementProfile into an XML formatted PLIST string.
 func SerializeDeviceManagementProfileToPLIST(profile string) (string, error) {
 	// Serialize the configuration to plist in XML format
 	output, err := plist.MarshalIndent(profile, plist.XMLFormat, "    ")
