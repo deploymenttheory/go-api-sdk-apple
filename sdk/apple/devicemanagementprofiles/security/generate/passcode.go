@@ -1,9 +1,9 @@
 package generate
 
 import (
-	"github.com/deploymenttheory/go-mdm-sdk-apple/sdk/apple/devicemanagementprofiles/security/models"
+	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/devicemanagementprofiles/security/models"
 
-	"github.com/deploymenttheory/go-mdm-sdk-apple/sdk/helpers"
+	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/helpers"
 )
 
 // DeviceManagementProfileConfigOptions holds customizable options for the passcode profile.

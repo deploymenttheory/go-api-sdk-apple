@@ -1,4 +1,4 @@
-module github.com/deploymenttheory/go-mdm-sdk-apple
+module github.com/deploymenttheory/go-apple-sdk-devicemanagement
 
 go 1.22.2
 

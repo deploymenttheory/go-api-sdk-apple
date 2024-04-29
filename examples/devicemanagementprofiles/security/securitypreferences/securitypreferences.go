@@ -6,10 +6,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-mdm-sdk-apple/examples/helpers"
-	"github.com/deploymenttheory/go-mdm-sdk-apple/sdk/apple/devicemanagementprofiles/security/generate"
+	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/examples/helpers"
+	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/devicemanagementprofiles/security/generate"
 
-	"github.com/deploymenttheory/go-mdm-sdk-apple/sdk/apple/serialize"
+	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/serialize"
 )
 
 func main() {
