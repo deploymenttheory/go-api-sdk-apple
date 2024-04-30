@@ -67,15 +67,15 @@ func CreateWiFiMobileDeviceManagementProfile(options WiFiMobileDeviceManagementP
 		PayloadContent: []models.WiFiMobileDeviceManagementProfileSubsetPayload{
 			{
 				SSID_STR:                           options.SSID,
-				AutoJoin:                           options.AutoJoin,
-				CaptiveBypass:                      options.CaptiveBypass,
-				DisableAssociationMACRandomization: options.DisableAssociationMACRandomization,
+				AutoJoin:                           &options.AutoJoin,
+				CaptiveBypass:                      &options.CaptiveBypass,
+				DisableAssociationMACRandomization: &options.DisableAssociationMACRandomization,
 				DisplayedOperatorName:              options.DisplayedOperatorName,
 				DomainName:                         options.DomainName,
-				EnableIPv6:                         options.EnableIPv6,
+				EnableIPv6:                         &options.EnableIPv6,
 				EncryptionType:                     options.EncryptionType,
-				HIDDEN_NETWORK:                     options.HIDDEN_NETWORK,
-				IsHotspot:                          options.IsHotspot,
+				HIDDEN_NETWORK:                     &options.HIDDEN_NETWORK,
+				IsHotspot:                          &options.IsHotspot,
 				MCCAndMNCs:                         options.MCCAndMNCs,
 				NAIRealmNames:                      options.NAIRealmNames,
 				Password:                           options.Password,
@@ -85,9 +85,9 @@ func CreateWiFiMobileDeviceManagementProfile(options WiFiMobileDeviceManagementP
 				ProxyServerPort:                    options.ProxyServerPort,
 				ProxyType:                          options.ProxyType,
 				RoamingConsortiumOIs:               options.RoamingConsortiumOIs,
-				ServiceProviderRoamingEnabled:      options.ServiceProviderRoamingEnabled,
+				ServiceProviderRoamingEnabled:      &options.ServiceProviderRoamingEnabled,
 				SetupModes:                         options.SetupModes,
-				TLSCertificateRequired:             options.TLSCertificateRequired,
+				TLSCertificateRequired:             &options.TLSCertificateRequired,
 				TLSMinimumVersion:                  options.TLSMinimumVersion,
 				TLSMaximumVersion:                  options.TLSMaximumVersion,
 				TLSTrustedCertificates:             options.TLSTrustedCertificates,
@@ -96,14 +96,14 @@ func CreateWiFiMobileDeviceManagementProfile(options WiFiMobileDeviceManagementP
 				UserPassword:                       options.UserPassword,
 				EAPClientConfiguration:             mapEAPClientConfig(options.EAPClientConfig),
 				QoSMarkingPolicy:                   mapQoSMarking(options.QoSMarking),
-				PayloadIdentifier:                  "com.example.mywifipayload",
+				PayloadIdentifier:                  "com.gomdmsdkapple.wifipayload",
 				PayloadType:                        "com.apple.wifi.managed",
 				PayloadUUID:                        helpers.GenerateUUID(),
 				PayloadVersion:                     1,
 			},
 		},
 		PayloadDisplayName: options.PayloadDisplayName,
-		PayloadIdentifier:  "com.example.mywifiprofile",
+		PayloadIdentifier:  "com.gomdmsdkapple.wifipayload",
 		PayloadType:        "Configuration",
 		PayloadUUID:        helpers.GenerateUUID(),
 		PayloadVersion:     1,
@@ -113,11 +113,11 @@ func CreateWiFiMobileDeviceManagementProfile(options WiFiMobileDeviceManagementP
 func mapEAPClientConfig(options EAPClientConfigOptions) models.EAPClientConfiguration {
 	return models.EAPClientConfiguration{
 		AcceptEAPTypes:                 options.AcceptEAPTypes,
-		EAPFASTProvisionPAC:            options.EAPFASTProvisionPAC,
-		EAPFASTProvisionPACAnonymously: options.EAPFASTProvisionPACAnonymously,
-		EAPFASTUsePAC:                  options.EAPFASTUsePAC,
+		EAPFASTProvisionPAC:            &options.EAPFASTProvisionPAC,
+		EAPFASTProvisionPACAnonymously: &options.EAPFASTProvisionPACAnonymously,
+		EAPFASTUsePAC:                  &options.EAPFASTUsePAC,
 		EAPSIMNumberOfRANDs:            options.EAPSIMNumberOfRANDs,
-		OneTimeUserPassword:            options.OneTimeUserPassword,
+		OneTimeUserPassword:            &options.OneTimeUserPassword,
 		OuterIdentity:                  options.OuterIdentity,
 		TTLSInnerAuthentication:        options.TTLSInnerAuthentication,
 	}
@@ -125,8 +125,8 @@ func mapEAPClientConfig(options EAPClientConfigOptions) models.EAPClientConfigur
 
 func mapQoSMarking(options QoSMarkingConfigOptions) models.QoSMarkingPolicy {
 	return models.QoSMarkingPolicy{
-		QoSMarkingAppleAudioVideoCalls:    options.QoSMarkingAppleAudioVideoCalls,
-		QoSMarkingEnabled:                 options.QoSMarkingEnabled,
+		QoSMarkingAppleAudioVideoCalls:    &options.QoSMarkingAppleAudioVideoCalls,
+		QoSMarkingEnabled:                 &options.QoSMarkingEnabled,
 		QoSMarkingAllowListAppIdentifiers: options.QoSMarkingAllowListAppIdentifiers,
 	}
 }

@@ -87,17 +87,17 @@ type WiFiMobileDeviceManagementProfile struct {
 // WiFiMobileDeviceManagementProfileSubsetPayload represents the WiFi configuration settings in the profile.
 type WiFiMobileDeviceManagementProfileSubsetPayload struct {
 	SSID_STR                           string                 `plist:"SSID_STR"`
-	AutoJoin                           bool                   `plist:"AutoJoin"`
-	CaptiveBypass                      bool                   `plist:"CaptiveBypass"`
-	DisableAssociationMACRandomization bool                   `plist:"DisableAssociationMACRandomization"`
+	AutoJoin                           *bool                  `plist:"AutoJoin"`
+	CaptiveBypass                      *bool                  `plist:"CaptiveBypass"`
+	DisableAssociationMACRandomization *bool                  `plist:"DisableAssociationMACRandomization"`
 	DisplayedOperatorName              string                 `plist:"DisplayedOperatorName"`
 	DomainName                         string                 `plist:"DomainName"`
 	EAPClientConfiguration             EAPClientConfiguration `plist:"EAPClientConfiguration"`
-	EnableIPv6                         bool                   `plist:"EnableIPv6"`
+	EnableIPv6                         *bool                  `plist:"EnableIPv6"`
 	EncryptionType                     string                 `plist:"EncryptionType"`
 	HESSID                             string                 `plist:"HESSID"`
-	HIDDEN_NETWORK                     bool                   `plist:"HIDDEN_NETWORK"`
-	IsHotspot                          bool                   `plist:"IsHotspot"`
+	HIDDEN_NETWORK                     *bool                  `plist:"HIDDEN_NETWORK"`
+	IsHotspot                          *bool                  `plist:"IsHotspot"`
 	MCCAndMNCs                         []string               `plist:"MCCAndMNCs"`
 	NAIRealmNames                      []string               `plist:"NAIRealmNames"`
 	Password                           string                 `plist:"Password"`
@@ -108,9 +108,9 @@ type WiFiMobileDeviceManagementProfileSubsetPayload struct {
 	ProxyType                          string                 `plist:"ProxyType"`
 	QoSMarkingPolicy                   QoSMarkingPolicy       `plist:"QoSMarkingPolicy"`
 	RoamingConsortiumOIs               []string               `plist:"RoamingConsortiumOIs"`
-	ServiceProviderRoamingEnabled      bool                   `plist:"ServiceProviderRoamingEnabled"`
+	ServiceProviderRoamingEnabled      *bool                  `plist:"ServiceProviderRoamingEnabled"`
 	SetupModes                         []string               `plist:"SetupModes"`
-	TLSCertificateRequired             bool                   `plist:"TLSCertificateRequired"`
+	TLSCertificateRequired             *bool                  `plist:"TLSCertificateRequired"`
 	TLSMinimumVersion                  string                 `plist:"TLSMinimumVersion"`
 	TLSMaximumVersion                  string                 `plist:"TLSMaximumVersion"`
 	TLSTrustedCertificates             []string               `plist:"TLSTrustedCertificates"`
@@ -126,18 +126,18 @@ type WiFiMobileDeviceManagementProfileSubsetPayload struct {
 // EAPClientConfiguration structures the necessary elements for enterprise network configurations.
 type EAPClientConfiguration struct {
 	AcceptEAPTypes                 []int  `plist:"AcceptEAPTypes"`
-	EAPFASTProvisionPAC            bool   `plist:"EAPFASTProvisionPAC"`
-	EAPFASTProvisionPACAnonymously bool   `plist:"EAPFASTProvisionPACAnonymously"`
-	EAPFASTUsePAC                  bool   `plist:"EAPFASTUsePAC"`
+	EAPFASTProvisionPAC            *bool  `plist:"EAPFASTProvisionPAC"`
+	EAPFASTProvisionPACAnonymously *bool  `plist:"EAPFASTProvisionPACAnonymously"`
+	EAPFASTUsePAC                  *bool  `plist:"EAPFASTUsePAC"`
 	EAPSIMNumberOfRANDs            int    `plist:"EAPSIMNumberOfRANDs"`
-	OneTimeUserPassword            bool   `plist:"OneTimeUserPassword"`
+	OneTimeUserPassword            *bool  `plist:"OneTimeUserPassword"`
 	OuterIdentity                  string `plist:"OuterIdentity"`
 	TTLSInnerAuthentication        string `plist:"TTLSInnerAuthentication"`
 }
 
 // QoSMarkingPolicy defines the settings for Quality of Service marking in a WiFi network.
 type QoSMarkingPolicy struct {
-	QoSMarkingAppleAudioVideoCalls    bool     `plist:"QoSMarkingAppleAudioVideoCalls"`
-	QoSMarkingEnabled                 bool     `plist:"QoSMarkingEnabled"`
+	QoSMarkingAppleAudioVideoCalls    *bool    `plist:"QoSMarkingAppleAudioVideoCalls"`
+	QoSMarkingEnabled                 *bool    `plist:"QoSMarkingEnabled"`
 	QoSMarkingAllowListAppIdentifiers []string `plist:"QoSMarkingAllowListAppIdentifiers"`
 }

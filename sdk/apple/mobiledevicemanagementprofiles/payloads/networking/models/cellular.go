@@ -79,7 +79,7 @@ type CellularMobileDeviceManagementProfileSubsetCellularAPNsItem struct {
 	AllowedProtocolMaskInDomesticRoaming int    `plist:"AllowedProtocolMaskInDomesticRoaming"`
 	AllowedProtocolMaskInRoaming         int    `plist:"AllowedProtocolMaskInRoaming"`
 	AuthenticationType                   string `plist:"AuthenticationType"`
-	EnableXLAT464                        bool   `plist:"EnableXLAT464"`
+	EnableXLAT464                        *bool  `plist:"EnableXLAT464"`
 	Name                                 string `plist:"Name"`
 	Password                             string `plist:"Password,omitempty"`
 	ProxyPort                            int    `plist:"ProxyPort,omitempty"`

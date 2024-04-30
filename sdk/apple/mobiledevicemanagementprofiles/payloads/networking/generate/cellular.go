@@ -54,7 +54,7 @@ func CreateCellularMobileDeviceManagementProfile(options CellularMobileDeviceMan
 			AllowedProtocolMaskInDomesticRoaming: apnOption.AllowedProtocolMaskInDomesticRoaming,
 			AllowedProtocolMaskInRoaming:         apnOption.AllowedProtocolMaskInRoaming,
 			AuthenticationType:                   apnOption.AuthenticationType,
-			EnableXLAT464:                        apnOption.EnableXLAT464,
+			EnableXLAT464:                        &apnOption.EnableXLAT464,
 			Password:                             apnOption.Password,
 			ProxyPort:                            apnOption.ProxyPort,
 			ProxyServer:                          apnOption.ProxyServer,
