@@ -1,7 +1,7 @@
 package generate
 
 import (
-	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/mobiledevicemanagementprofiles/security/models"
+	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/mobiledevicemanagementprofiles/payloads/security/models"
 
 	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/helpers"
 )

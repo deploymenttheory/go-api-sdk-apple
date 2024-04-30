@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/examples/helpers"
-	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/mobiledevicemanagementprofiles/security/generate"
+	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/mobiledevicemanagementprofiles/payloads/security/generate"
 
 	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/serialize"
 )

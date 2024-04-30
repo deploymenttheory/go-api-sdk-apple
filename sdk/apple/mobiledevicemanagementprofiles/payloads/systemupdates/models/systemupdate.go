@@ -41,24 +41,24 @@ Profile Example:
 */
 package models
 
-// SystemUpdateDeviceManagementProfile defines the structure for managing system update policies on devices.
-type SystemUpdateDeviceManagementProfile struct {
-	Version                  string                                             `plist:"version,attr"`
-	PayloadContent           []SystemUpdateDeviceManagementProfileSubsetPayload `plist:"PayloadContent"`
-	PayloadDescription       string                                             `plist:"PayloadDescription,omitempty"`
-	PayloadDisplayName       string                                             `plist:"PayloadDisplayName,omitempty"`
-	PayloadEnabled           string                                             `plist:"PayloadEnabled,omitempty"`
-	PayloadIdentifier        string                                             `plist:"PayloadIdentifier,omitempty"`
-	PayloadOrganization      string                                             `plist:"PayloadOrganization,omitempty"`
-	PayloadRemovalDisallowed string                                             `plist:"PayloadRemovalDisallowed,omitempty"`
-	PayloadScope             string                                             `plist:"PayloadScope,omitempty"`
-	PayloadType              string                                             `plist:"PayloadType,omitempty"`
-	PayloadUUID              string                                             `plist:"PayloadUUID,omitempty"`
-	PayloadVersion           int                                                `plist:"PayloadVersion,omitempty"`
+// SystemUpdateMobileDeviceManagementProfile defines the structure for managing system update policies on devices.
+type SystemUpdateMobileDeviceManagementProfile struct {
+	Version                  string                                                   `plist:"version,attr"`
+	PayloadContent           []SystemUpdateMobileDeviceManagementProfileSubsetPayload `plist:"PayloadContent"`
+	PayloadDescription       string                                                   `plist:"PayloadDescription,omitempty"`
+	PayloadDisplayName       string                                                   `plist:"PayloadDisplayName,omitempty"`
+	PayloadEnabled           string                                                   `plist:"PayloadEnabled,omitempty"`
+	PayloadIdentifier        string                                                   `plist:"PayloadIdentifier,omitempty"`
+	PayloadOrganization      string                                                   `plist:"PayloadOrganization,omitempty"`
+	PayloadRemovalDisallowed string                                                   `plist:"PayloadRemovalDisallowed,omitempty"`
+	PayloadScope             string                                                   `plist:"PayloadScope,omitempty"`
+	PayloadType              string                                                   `plist:"PayloadType,omitempty"`
+	PayloadUUID              string                                                   `plist:"PayloadUUID,omitempty"`
+	PayloadVersion           int                                                      `plist:"PayloadVersion,omitempty"`
 }
 
-// SystemUpdateDeviceManagementProfileSubsetPayload represents the system update settings configured in the policy.
-type SystemUpdateDeviceManagementProfileSubsetPayload struct {
+// SystemUpdateMobileDeviceManagementProfileSubsetPayload represents the system update settings configured in the policy.
+type SystemUpdateMobileDeviceManagementProfileSubsetPayload struct {
 	AllowPreReleaseInstallation                 *bool  `plist:"AllowPreReleaseInstallation"`
 	AutomaticallyInstallAppUpdates              *bool  `plist:"AutomaticallyInstallAppUpdates"`
 	AutomaticallyInstallMacOSUpdates            *bool  `plist:"AutomaticallyInstallMacOSUpdates"`

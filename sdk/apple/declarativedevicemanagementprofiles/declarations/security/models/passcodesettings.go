@@ -9,11 +9,12 @@ Version:
 Ref: 			https://developer.apple.com/documentation/devicemanagement/passcodesettings
 
 DDM Profile Example:
+TODO: To be added.
 */
 
 package models
 
-// ObjectPasscodeSettingsDeclarativeDeviceManagementProfile defines the structure for managing passcode policies on devices.
+// ObjectPasscodeSettingsDeclarativeDeviceManagementProfile defines the base structure for declarative management profiles.
 type ObjectPasscodeSettingsDeclarativeDeviceManagementProfile struct {
 	Type        string                                                          `json:"Type"`        // The declaration type, a dot-separated sequence of tokens.
 	Identifier  string                                                          `json:"Identifier"`  // The unique identifier, typically a UUID, within the set of all declarations sent to a device.
@@ -36,10 +37,6 @@ type PasscodeSettingsDeclarativeDeviceManagementProfileSubsetPayload struct {
 	RequireComplexPasscode       *bool                             `json:"RequireComplexPasscode"`
 	RequirePasscode              *bool                             `json:"RequirePasscode"`
 	CustomRegex                  PasscodeSettingsCustomRegexObject `json:"CustomRegex"`
-	PayloadIdentifier            string                            `json:"PayloadIdentifier"`
-	PayloadType                  string                            `json:"PayloadType"`
-	PayloadUUID                  string                            `json:"PayloadUUID"`
-	PayloadVersion               int                               `json:"PayloadVersion"`
 }
 
 // PasscodeSettingsCustomRegexObject defines the regular expression and its descriptions to enforce password compliance.

@@ -1,7 +1,7 @@
 package generate
 
 import (
-	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/declarativedevicemanagementprofiles/security/models"
+	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/apple/declarativedevicemanagementprofiles/declarations/security/models"
 	"github.com/deploymenttheory/go-apple-sdk-devicemanagement/sdk/helpers"
 )
 
@@ -47,10 +47,6 @@ func CreatePasscodeSettingsDeclarativeDeviceManagementProfile(options PasscodeDe
 				Description: models.PasscodeSettingsCustomRegexDescriptionObject(options.CustomRegexDescription),
 				Regex:       options.CustomRegexPattern,
 			},
-			PayloadIdentifier: "com.gomdmsdkapple.passcodesettingspayload",
-			PayloadType:       "com.apple.configuration.passcode.settings",
-			PayloadUUID:       helpers.GenerateUUID(),
-			PayloadVersion:    1,
 		},
 	}
 }
