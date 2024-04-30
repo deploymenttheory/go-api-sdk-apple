@@ -52,7 +52,7 @@ func main() {
 // GenerateWiFiProfile generates a cellular profile with the provided options.
 func GenerateWiFiProfile() generate.WiFiMobileDeviceManagementProfileConfigOptions {
 	return generate.WiFiMobileDeviceManagementProfileConfigOptions{
-		PayloadDisplayName:                 "WiFi",
+		PayloadDisplayName:                 "wifi",
 		SSID:                               "Example",
 		AutoJoin:                           true,
 		CaptiveBypass:                      false,

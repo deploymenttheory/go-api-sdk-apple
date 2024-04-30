@@ -60,7 +60,7 @@
                 <key>PayloadType</key>
                 <string>com.apple.wifi.managed</string>
                 <key>PayloadUUID</key>
-                <string>d555ffd4-707c-ece8-a788-4b3fb2d3a655</string>
+                <string>69ddb3f3-0efa-5587-0bc0-b09c57f14109</string>
                 <key>PayloadVersion</key>
                 <integer>1</integer>
                 <key>ProxyPACURL</key>
@@ -111,13 +111,13 @@
             </dict>
         </array>
         <key>PayloadDisplayName</key>
-        <string>WiFi</string>
+        <string>wifi</string>
         <key>PayloadIdentifier</key>
         <string>com.gomdmsdkapple.wifipayload</string>
         <key>PayloadType</key>
         <string>Configuration</string>
         <key>PayloadUUID</key>
-        <string>9ddc4412-40b6-2016-1e9b-2bd500318322</string>
+        <string>eb333353-5d5b-2ce5-cd72-9d18352a4b7a</string>
         <key>PayloadVersion</key>
         <integer>1</integer>
         <key>version</key>
