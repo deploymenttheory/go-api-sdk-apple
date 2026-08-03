@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0](https://github.com/deploymenttheory/go-sdk-appleservices/compare/v0.7.0...v0.8.0) (2026-08-03)
+
+
+### Features
+
+* added abm v2.2 updates - https://developer.apple.com/documentation/apple-school-and-business-manager-api/apple-school-manager-and-apple-business-api-changelog ([e552abd](https://github.com/deploymenttheory/go-sdk-appleservices/commit/e552abd1310d96bf6d49047239f7cd2abd09efcb))
+* added abm v2.2 updates - https://developer.apple.com/documentation/apple-school-and-business-manager-api/apple-school-manager-and-apple-business-api-changelog ([07c6153](https://github.com/deploymenttheory/go-sdk-appleservices/commit/07c6153aac385420b5654474a258c157ae153efa))
+
 ## [0.7.0](https://github.com/deploymenttheory/go-sdk-appleservices/compare/v0.6.0...v0.7.0) (2026-07-17)
 
 
