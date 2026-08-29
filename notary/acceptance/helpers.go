@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/notary"
+	"github.com/deploymenttheory/go-sdk-appleservices/notary"
 	"github.com/stretchr/testify/require"
 )
 

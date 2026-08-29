@@ -8,8 +8,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/apple_update_cdn"
-	"github.com/deploymenttheory/go-api-sdk-apple/apple_update_cdn/tools/download_progress"
+	"github.com/deploymenttheory/go-sdk-appleservices/apple_update_cdn"
+	"github.com/deploymenttheory/go-sdk-appleservices/apple_update_cdn/tools/download_progress"
 )
 
 func main() {

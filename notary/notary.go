@@ -1,8 +1,8 @@
 package notary
 
 import (
-	"github.com/deploymenttheory/go-api-sdk-apple/notary/client"
-	"github.com/deploymenttheory/go-api-sdk-apple/notary/notary_api/submissions"
+	"github.com/deploymenttheory/go-sdk-appleservices/notary/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/notary/notary_api/submissions"
 )
 
 // Client is the main entry point for the Apple Notary API SDK.

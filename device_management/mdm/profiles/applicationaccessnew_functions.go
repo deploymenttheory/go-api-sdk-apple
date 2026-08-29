@@ -5,7 +5,7 @@ package profiles
 import (
 	"errors"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/validate"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/validate"
 )
 
 // PayloadType returns the wire type identifier for ApplicationaccessNew.

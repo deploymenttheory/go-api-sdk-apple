@@ -5,7 +5,7 @@ package assets
 import (
 	"errors"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/validate"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/validate"
 )
 
 // DeclarationType returns the wire type identifier for Scep.

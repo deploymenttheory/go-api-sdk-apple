@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/axm"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm"
 	"github.com/stretchr/testify/require"
 )
 

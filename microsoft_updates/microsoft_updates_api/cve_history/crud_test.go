@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/client"
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/microsoft_updates_api/cve_history"
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/microsoft_updates_api/cve_history/mocks"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/microsoft_updates_api/cve_history"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/microsoft_updates_api/cve_history/mocks"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

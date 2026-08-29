@@ -1,4 +1,4 @@
-module github.com/deploymenttheory/go-api-sdk-apple
+module github.com/deploymenttheory/go-sdk-appleservices
 
 go 1.25.0
 

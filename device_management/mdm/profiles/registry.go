@@ -3,7 +3,7 @@
 package profiles
 
 import (
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/mdm"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/mdm"
 )
 
 // ByPayloadType maps profile PayloadType identifiers to payload factories.

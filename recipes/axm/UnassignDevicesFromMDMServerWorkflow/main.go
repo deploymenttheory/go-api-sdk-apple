@@ -6,8 +6,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/axm"
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/devicemanagement"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/devicemanagement"
 )
 
 // UnassignDevicesFromMDMServerWorkflow demonstrates a complete workflow for:

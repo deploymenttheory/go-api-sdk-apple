@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/apple_update_cdn/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/apple_update_cdn/client"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

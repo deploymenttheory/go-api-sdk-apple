@@ -1,16 +1,16 @@
 package microsoft_updates
 
 import (
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/client"
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/microsoft_updates_api/appstore_ios"
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/microsoft_updates_api/appstore_macos"
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/microsoft_updates_api/cve_history"
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/microsoft_updates_api/edge"
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/microsoft_updates_api/onedrive"
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/microsoft_updates_api/standalone"
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/microsoft_updates_api/standalone_beta"
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/microsoft_updates_api/standalone_preview"
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/microsoft_updates_api/update_history"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/microsoft_updates_api/appstore_ios"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/microsoft_updates_api/appstore_macos"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/microsoft_updates_api/cve_history"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/microsoft_updates_api/edge"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/microsoft_updates_api/onedrive"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/microsoft_updates_api/standalone"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/microsoft_updates_api/standalone_beta"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/microsoft_updates_api/standalone_preview"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/microsoft_updates_api/update_history"
 )
 
 // Client is the main entry point for the Microsoft Updates SDK.

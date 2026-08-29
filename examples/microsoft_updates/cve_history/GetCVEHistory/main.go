@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	microsoft_updates "github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates"
+	microsoft_updates "github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates"
 )
 
 func main() {

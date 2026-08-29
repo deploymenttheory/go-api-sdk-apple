@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/notary/client"
-	"github.com/deploymenttheory/go-api-sdk-apple/notary/constants"
+	"github.com/deploymenttheory/go-sdk-appleservices/notary/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/notary/constants"
 	"resty.dev/v3"
 )
 

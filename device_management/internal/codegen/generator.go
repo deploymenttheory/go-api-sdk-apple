@@ -15,14 +15,14 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/internal/codegen/build"
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/internal/codegen/fileasm"
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/internal/codegen/render"
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/internal/codegen/view"
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/internal/spec"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/internal/codegen/build"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/internal/codegen/fileasm"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/internal/codegen/render"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/internal/codegen/view"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/internal/spec"
 )
 
-const modulePath = "github.com/deploymenttheory/go-api-sdk-apple/device_management"
+const modulePath = "github.com/deploymenttheory/go-sdk-appleservices/device_management"
 
 // family maps an upstream spec category onto a generated package.
 type family struct {

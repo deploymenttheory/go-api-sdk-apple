@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/itunes/client"
-	"github.com/deploymenttheory/go-api-sdk-apple/itunes/constants"
+	"github.com/deploymenttheory/go-sdk-appleservices/itunes/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/itunes/constants"
 	"resty.dev/v3"
 )
 

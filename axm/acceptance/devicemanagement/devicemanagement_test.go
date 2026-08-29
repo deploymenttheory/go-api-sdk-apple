@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	acc "github.com/deploymenttheory/go-api-sdk-apple/axm/acceptance"
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/devicemanagement"
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/devices"
+	acc "github.com/deploymenttheory/go-sdk-appleservices/axm/acceptance"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/devicemanagement"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/devices"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

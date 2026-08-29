@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	microsoft_updates "github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates"
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/microsoft_updates_api/edge"
+	microsoft_updates "github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/microsoft_updates_api/edge"
 )
 
 func printRelease(channel string, r *edge.EdgeRelease) {

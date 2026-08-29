@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/client"
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/constants"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/constants"
 )
 
 // UpdateHistoryService fetches and parses the Office for Mac update history table

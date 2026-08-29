@@ -1,8 +1,8 @@
 # Go API SDK for Apple Services
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/deploymenttheory/go-api-sdk-apple.svg)](https://pkg.go.dev/github.com/deploymenttheory/go-api-sdk-apple)
-[![Go Report Card](https://goreportcard.com/badge/github.com/deploymenttheory/go-api-sdk-apple)](https://goreportcard.com/report/github.com/deploymenttheory/go-api-sdk-apple)
-[![License](https://img.shields.io/github/license/deploymenttheory/go-api-sdk-apple)](https://github.com/deploymenttheory/go-api-sdk-apple/blob/main/LICENSE)
+[![Go Reference](https://pkg.go.dev/badge/github.com/deploymenttheory/go-sdk-appleservices.svg)](https://pkg.go.dev/github.com/deploymenttheory/go-sdk-appleservices)
+[![Go Report Card](https://goreportcard.com/badge/github.com/deploymenttheory/go-sdk-appleservices)](https://goreportcard.com/report/github.com/deploymenttheory/go-sdk-appleservices)
+[![License](https://img.shields.io/github/license/deploymenttheory/go-sdk-appleservices)](https://github.com/deploymenttheory/go-sdk-appleservices/blob/main/LICENSE)
 
 A collection of Go SDKs for interacting with Apple API services, device management infrastructure, and Microsoft software update feeds:
 
@@ -68,9 +68,9 @@ import (
     "fmt"
     "log"
 
-    "github.com/deploymenttheory/go-api-sdk-apple/axm"
-    "github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/devicemanagement"
-    "github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/devices"
+    "github.com/deploymenttheory/go-sdk-appleservices/axm"
+    "github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/devicemanagement"
+    "github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/devices"
 )
 
 func main() {
@@ -155,11 +155,11 @@ import (
     "fmt"
     "log"
 
-    "github.com/deploymenttheory/go-api-sdk-apple/device_management/ddm"
-    "github.com/deploymenttheory/go-api-sdk-apple/device_management/ddm/configurations"
-    "github.com/deploymenttheory/go-api-sdk-apple/device_management/mdm"
-    "github.com/deploymenttheory/go-api-sdk-apple/device_management/mdm/commands"
-    "github.com/deploymenttheory/go-api-sdk-apple/device_management/ptr"
+    "github.com/deploymenttheory/go-sdk-appleservices/device_management/ddm"
+    "github.com/deploymenttheory/go-sdk-appleservices/device_management/ddm/configurations"
+    "github.com/deploymenttheory/go-sdk-appleservices/device_management/mdm"
+    "github.com/deploymenttheory/go-sdk-appleservices/device_management/mdm/commands"
+    "github.com/deploymenttheory/go-sdk-appleservices/device_management/ptr"
 )
 
 func main() {
@@ -229,8 +229,8 @@ import (
     "os"
     "path/filepath"
 
-    "github.com/deploymenttheory/go-api-sdk-apple/apple_update_cdn"
-    "github.com/deploymenttheory/go-api-sdk-apple/apple_update_cdn/tools/download_progress"
+    "github.com/deploymenttheory/go-sdk-appleservices/apple_update_cdn"
+    "github.com/deploymenttheory/go-sdk-appleservices/apple_update_cdn/tools/download_progress"
 )
 
 func main() {
@@ -312,7 +312,7 @@ import (
     "fmt"
     "log"
 
-    microsoft_updates "github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates"
+    microsoft_updates "github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates"
 )
 
 func main() {
@@ -392,7 +392,7 @@ examples/
 
 ## Documentation
 
-- [Go Reference Documentation](https://pkg.go.dev/github.com/deploymenttheory/go-api-sdk-apple)
+- [Go Reference Documentation](https://pkg.go.dev/github.com/deploymenttheory/go-sdk-appleservices)
 - [iTunes Search API Documentation](https://performance-partners.apple.com/search-api)
 - [Apple Business Manager API Documentation](https://developer.apple.com/documentation/applebusinessmanagerapi)
 - [Apple Device Management Documentation](https://developer.apple.com/documentation/devicemanagement)

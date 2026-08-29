@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/axm"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm"
 )
 
 func main() {

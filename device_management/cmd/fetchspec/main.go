@@ -30,7 +30,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/internal/spec"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/internal/spec"
 )
 
 // Pinned upstream state. Bump commit (and re-run) to adopt a new drop.

@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/axm"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm"
 )
 
 // TestConfig holds configuration for acceptance tests, driven by environment variables.

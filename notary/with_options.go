@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/notary/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/notary/client"
 	"go.uber.org/zap"
 )
 
