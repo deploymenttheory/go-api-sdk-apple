@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/itunes"
-	"github.com/deploymenttheory/go-api-sdk-apple/itunes/itunes_api/search"
+	"github.com/deploymenttheory/go-sdk-appleservices/itunes"
+	"github.com/deploymenttheory/go-sdk-appleservices/itunes/itunes_api/search"
 )
 
 func main() {

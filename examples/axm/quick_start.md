@@ -17,7 +17,7 @@ package main
 import (
     "log"
 
-    "github.com/deploymenttheory/go-api-sdk-apple/axm"
+    "github.com/deploymenttheory/go-sdk-appleservices/axm"
 )
 
 func main() {
@@ -76,7 +76,7 @@ import (
     "crypto/tls"
     "time"
 
-    "github.com/deploymenttheory/go-api-sdk-apple/axm"
+    "github.com/deploymenttheory/go-sdk-appleservices/axm"
     "go.uber.org/zap"
 )
 
@@ -110,8 +110,8 @@ import (
     "fmt"
     "log"
 
-    "github.com/deploymenttheory/go-api-sdk-apple/axm"
-    "github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/devices"
+    "github.com/deploymenttheory/go-sdk-appleservices/axm"
+    "github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/devices"
 )
 
 func main() {
@@ -204,8 +204,8 @@ import (
     "fmt"
     "log"
 
-    "github.com/deploymenttheory/go-api-sdk-apple/axm"
-    "github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/devicemanagement"
+    "github.com/deploymenttheory/go-sdk-appleservices/axm"
+    "github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/devicemanagement"
 )
 
 func main() {
@@ -310,7 +310,7 @@ See full example: [UnassignDevicesFromServer/main.go](./devicemanagement/Unassig
 ## Error Handling
 
 ```go
-import "github.com/deploymenttheory/go-api-sdk-apple/axm"
+import "github.com/deploymenttheory/go-sdk-appleservices/axm"
 
 response, _, err := c.AXMAPI.Devices.GetByDeviceIDV1(ctx, deviceID, opts)
 if err != nil {

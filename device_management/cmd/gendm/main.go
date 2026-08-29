@@ -13,7 +13,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/internal/codegen"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/internal/codegen"
 )
 
 func main() {

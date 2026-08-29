@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/apple_update_cdn/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/apple_update_cdn/client"
 	"resty.dev/v3"
 )
 

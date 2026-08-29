@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/itunes"
+	"github.com/deploymenttheory/go-sdk-appleservices/itunes"
 )
 
 // TestConfig holds configuration for iTunes acceptance tests, driven by

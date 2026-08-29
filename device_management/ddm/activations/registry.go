@@ -3,7 +3,7 @@
 package activations
 
 import (
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/ddm"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/ddm"
 )
 
 // ByDeclarationType maps declaration type identifiers to payload factories.

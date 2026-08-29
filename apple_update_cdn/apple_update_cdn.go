@@ -1,10 +1,10 @@
 package apple_update_cdn
 
 import (
-	"github.com/deploymenttheory/go-api-sdk-apple/apple_update_cdn/apple_update_cdn_api/cdn"
-	"github.com/deploymenttheory/go-api-sdk-apple/apple_update_cdn/apple_update_cdn_api/firmware"
-	"github.com/deploymenttheory/go-api-sdk-apple/apple_update_cdn/apple_update_cdn_api/gdmf"
-	"github.com/deploymenttheory/go-api-sdk-apple/apple_update_cdn/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/apple_update_cdn/apple_update_cdn_api/cdn"
+	"github.com/deploymenttheory/go-sdk-appleservices/apple_update_cdn/apple_update_cdn_api/firmware"
+	"github.com/deploymenttheory/go-sdk-appleservices/apple_update_cdn/apple_update_cdn_api/gdmf"
+	"github.com/deploymenttheory/go-sdk-appleservices/apple_update_cdn/client"
 )
 
 // Client is the main entry point for the Apple Update CDN SDK.

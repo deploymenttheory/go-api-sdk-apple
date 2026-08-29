@@ -1,17 +1,17 @@
 package axm
 
 import (
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/apps"
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/auditevents"
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/blueprints"
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/configurations"
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/devicemanagement"
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/devices"
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/organizationalunits"
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/packages"
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/usergroups"
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/users"
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/apps"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/auditevents"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/blueprints"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/configurations"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/devicemanagement"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/devices"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/organizationalunits"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/packages"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/usergroups"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/users"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/client"
 )
 
 // Client is the main entry point for the Apple Business Manager API SDK.

@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/ddm"
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/ddm/configurations"
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/ptr"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/ddm"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/ddm/configurations"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/ptr"
 )
 
 func main() {

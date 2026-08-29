@@ -8,7 +8,7 @@ import (
 	"crypto/sha256"
 	"fmt"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/internal/plistenc"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/internal/plistenc"
 )
 
 // CommandPayload is implemented by every generated MDM command struct.

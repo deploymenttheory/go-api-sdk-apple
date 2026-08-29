@@ -1,8 +1,8 @@
 package itunes
 
 import (
-	"github.com/deploymenttheory/go-api-sdk-apple/itunes/client"
-	"github.com/deploymenttheory/go-api-sdk-apple/itunes/itunes_api/search"
+	"github.com/deploymenttheory/go-sdk-appleservices/itunes/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/itunes/itunes_api/search"
 )
 
 // Client is the main entry point for the iTunes Search API SDK.

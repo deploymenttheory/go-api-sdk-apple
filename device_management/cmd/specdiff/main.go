@@ -17,7 +17,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/internal/spec"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/internal/spec"
 )
 
 func main() {

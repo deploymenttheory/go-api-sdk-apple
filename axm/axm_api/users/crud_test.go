@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/axm_api/users/mocks"
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/users/mocks"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/client"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

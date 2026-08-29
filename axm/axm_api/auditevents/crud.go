@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/client"
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/constants"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/constants"
 	"resty.dev/v3"
 )
 

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/apple_update_cdn/apple_update_cdn_api/cdn"
+	"github.com/deploymenttheory/go-sdk-appleservices/apple_update_cdn/apple_update_cdn_api/cdn"
 )
 
 func main() {

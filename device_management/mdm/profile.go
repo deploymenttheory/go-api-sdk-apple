@@ -3,7 +3,7 @@ package mdm
 import (
 	"fmt"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/internal/plistenc"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/internal/plistenc"
 )
 
 // ProfilePayload is implemented by every generated profile payload struct.

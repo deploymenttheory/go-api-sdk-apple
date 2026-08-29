@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/notary/notary_api/submissions/mocks"
-	"github.com/deploymenttheory/go-api-sdk-apple/notary/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/notary/notary_api/submissions/mocks"
+	"github.com/deploymenttheory/go-sdk-appleservices/notary/client"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

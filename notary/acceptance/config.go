@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/notary"
+	"github.com/deploymenttheory/go-sdk-appleservices/notary"
 )
 
 // TestConfig holds configuration for acceptance tests, driven by environment variables.

@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	acc "github.com/deploymenttheory/go-api-sdk-apple/itunes/acceptance"
-	"github.com/deploymenttheory/go-api-sdk-apple/itunes/itunes_api/search"
+	acc "github.com/deploymenttheory/go-sdk-appleservices/itunes/acceptance"
+	"github.com/deploymenttheory/go-sdk-appleservices/itunes/itunes_api/search"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

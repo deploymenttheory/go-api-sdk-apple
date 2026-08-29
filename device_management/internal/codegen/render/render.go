@@ -9,7 +9,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/internal/codegen/view"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/internal/codegen/view"
 )
 
 //go:embed templates/*.tmpl

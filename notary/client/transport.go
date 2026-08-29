@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/notary/constants"
+	"github.com/deploymenttheory/go-sdk-appleservices/notary/constants"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 )

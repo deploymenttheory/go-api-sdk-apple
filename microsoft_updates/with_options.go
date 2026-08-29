@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/client"
 	"go.uber.org/zap"
 )
 

@@ -5,8 +5,8 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/client"
-	"github.com/deploymenttheory/go-api-sdk-apple/microsoft_updates/constants"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/microsoft_updates/constants"
 )
 
 // StandalonePreviewService fetches macOS standalone application metadata from the

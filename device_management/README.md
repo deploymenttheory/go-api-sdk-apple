@@ -25,12 +25,12 @@ MDM command plists · .mobileconfig profiles · DDM declaration JSON
 
 ```go
 import (
-    dm "github.com/deploymenttheory/go-api-sdk-apple/device_management"
-    "github.com/deploymenttheory/go-api-sdk-apple/device_management/ddm"
-    "github.com/deploymenttheory/go-api-sdk-apple/device_management/ddm/configurations"
-    "github.com/deploymenttheory/go-api-sdk-apple/device_management/mdm"
-    "github.com/deploymenttheory/go-api-sdk-apple/device_management/mdm/commands"
-    "github.com/deploymenttheory/go-api-sdk-apple/device_management/ptr"
+    dm "github.com/deploymenttheory/go-sdk-appleservices/device_management"
+    "github.com/deploymenttheory/go-sdk-appleservices/device_management/ddm"
+    "github.com/deploymenttheory/go-sdk-appleservices/device_management/ddm/configurations"
+    "github.com/deploymenttheory/go-sdk-appleservices/device_management/mdm"
+    "github.com/deploymenttheory/go-sdk-appleservices/device_management/mdm/commands"
+    "github.com/deploymenttheory/go-sdk-appleservices/device_management/ptr"
 )
 
 // MDM command plist

@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/axm/constants"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/constants"
 	"go.uber.org/zap"
 	"resty.dev/v3"
 )

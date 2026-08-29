@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/itunes/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/itunes/client"
 	"go.uber.org/zap"
 )
 

@@ -3,8 +3,8 @@ package gdmf
 import (
 	"context"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/apple_update_cdn/client"
-	"github.com/deploymenttheory/go-api-sdk-apple/apple_update_cdn/constants"
+	"github.com/deploymenttheory/go-sdk-appleservices/apple_update_cdn/client"
+	"github.com/deploymenttheory/go-sdk-appleservices/apple_update_cdn/constants"
 	"resty.dev/v3"
 )
 

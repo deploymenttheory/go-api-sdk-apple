@@ -10,14 +10,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/ddm"
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/ddm/activations"
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/ddm/configurations"
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/mdm"
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/mdm/commands"
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/mdm/profiles"
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/ptr"
-	"github.com/deploymenttheory/go-api-sdk-apple/device_management/validate"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/ddm"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/ddm/activations"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/ddm/configurations"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/mdm"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/mdm/commands"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/mdm/profiles"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/ptr"
+	"github.com/deploymenttheory/go-sdk-appleservices/device_management/validate"
 )
 
 func TestSmokeCommandPlist(t *testing.T) {
