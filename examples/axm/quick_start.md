@@ -305,6 +305,164 @@ fmt.Printf("Activity ID: %s — Status: %s\n",
 
 See full example: [UnassignDevicesFromServer/main.go](./devicemanagement/UnassignDevicesFromServer/main.go)
 
+### Schedule a device management service migration
+
+Migration moves a managed device to a different device management service without erasing
+it. All four migration and release operations go through the same endpoint, so they share
+one method — `CreateOrgDeviceActivityV1` — differing only in `activityType`.
+
+```go
+import "github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/devicemanagement"
+
+// The API rejects deadlines more than 90 days in the future.
+deadline := time.Now().UTC().Add(30 * 24 * time.Hour)
+
+response, _, err := c.AXMAPI.DeviceManagement.CreateOrgDeviceActivityV1(ctx, &devicemanagement.OrgDeviceActivityCreateRequest{
+    Data: devicemanagement.OrgDeviceActivityData{
+        Type: devicemanagement.ResourceTypeOrgDeviceActivities,
+        Attributes: devicemanagement.OrgDeviceActivityCreateAttributes{
+            ActivityType: devicemanagement.ActivityTypeAssignDevicesWithMDMMigrationDeadline,
+            ActivityTypeMetadata: &devicemanagement.ActivityTypeMetadata{
+                MDMMigrationDeadlineDateTime: &deadline,
+            },
+        },
+        Relationships: devicemanagement.OrgDeviceActivityCreateRelationships{
+            MDMServer: &devicemanagement.OrgDeviceActivityMDMServerRelationship{
+                Data: devicemanagement.OrgDeviceActivityMDMServerLinkage{
+                    Type: devicemanagement.ResourceTypeMDMServers,
+                    ID:   mdmServerID,
+                },
+            },
+            Devices: &devicemanagement.OrgDeviceActivityDevicesRelationship{
+                Data: []devicemanagement.OrgDeviceActivityDeviceLinkage{
+                    {Type: devicemanagement.ResourceTypeOrgDevices, ID: "C39J8W1H3VG5"},
+                },
+            },
+        },
+    },
+})
+if err != nil {
+    log.Fatalf("Error: %v", err)
+}
+fmt.Printf("Migration activity: %s\n", response.Data.ID)
+```
+
+Check eligibility and progress from the device side:
+
+```go
+device, _, err := c.AXMAPI.Devices.GetByDeviceIDV1(ctx, deviceID, &devices.RequestQueryOptions{
+    Fields: []string{
+        devices.FieldIsMdmMigrationCapable,
+        devices.FieldMdmMigrationStatus,
+        devices.FieldMdmMigrationDeadlineDateTime,
+    },
+})
+```
+
+See full example: [AssignDevicesWithMigrationDeadline/main.go](./devicemanagement/AssignDevicesWithMigrationDeadline/main.go)
+
+### Update a migration deadline
+
+`UPDATE_MDM_MIGRATION_DEADLINE` takes no `mdmServer` relationship. A deadline earlier than
+the existing one, or in the past, is honoured by the device immediately without offering
+the user the option to delay.
+
+```go
+response, _, err := c.AXMAPI.DeviceManagement.CreateOrgDeviceActivityV1(ctx, &devicemanagement.OrgDeviceActivityCreateRequest{
+    Data: devicemanagement.OrgDeviceActivityData{
+        Type: devicemanagement.ResourceTypeOrgDeviceActivities,
+        Attributes: devicemanagement.OrgDeviceActivityCreateAttributes{
+            ActivityType: devicemanagement.ActivityTypeUpdateMDMMigrationDeadline,
+            ActivityTypeMetadata: &devicemanagement.ActivityTypeMetadata{
+                MDMMigrationDeadlineDateTime: &newDeadline,
+            },
+        },
+        Relationships: devicemanagement.OrgDeviceActivityCreateRelationships{
+            Devices: &devicemanagement.OrgDeviceActivityDevicesRelationship{Data: deviceLinkages},
+        },
+    },
+})
+```
+
+See full example: [UpdateMigrationDeadline/main.go](./devicemanagement/UpdateMigrationDeadline/main.go)
+
+### Cancel a migration
+
+`CANCEL_MDM_MIGRATION` takes neither an `mdmServer` relationship nor metadata. Serial
+numbers that are not undergoing a migration are reported as failures in the activity log,
+not as an error on the call.
+
+```go
+response, _, err := c.AXMAPI.DeviceManagement.CreateOrgDeviceActivityV1(ctx, &devicemanagement.OrgDeviceActivityCreateRequest{
+    Data: devicemanagement.OrgDeviceActivityData{
+        Type: devicemanagement.ResourceTypeOrgDeviceActivities,
+        Attributes: devicemanagement.OrgDeviceActivityCreateAttributes{
+            ActivityType: devicemanagement.ActivityTypeCancelMDMMigration,
+        },
+        Relationships: devicemanagement.OrgDeviceActivityCreateRelationships{
+            Devices: &devicemanagement.OrgDeviceActivityDevicesRelationship{Data: deviceLinkages},
+        },
+    },
+})
+```
+
+See full example: [CancelMigration/main.go](./devicemanagement/CancelMigration/main.go)
+
+### Release devices from the organization
+
+> **Releasing devices is irreversible.** Released devices are no longer registered to the
+> organization, their device enrollment assignments are removed, they are unenrolled from
+> the built-in device management service, and they are removed from any Blueprints.
+> Apple Business API 2.4+ only.
+
+```go
+response, _, err := c.AXMAPI.DeviceManagement.CreateOrgDeviceActivityV1(ctx, &devicemanagement.OrgDeviceActivityCreateRequest{
+    Data: devicemanagement.OrgDeviceActivityData{
+        Type: devicemanagement.ResourceTypeOrgDeviceActivities,
+        Attributes: devicemanagement.OrgDeviceActivityCreateAttributes{
+            ActivityType: devicemanagement.ActivityTypeReleaseDevices,
+        },
+        Relationships: devicemanagement.OrgDeviceActivityCreateRelationships{
+            Devices: &devicemanagement.OrgDeviceActivityDevicesRelationship{Data: deviceLinkages},
+        },
+    },
+})
+```
+
+See full example: [ReleaseDevices/main.go](./devicemanagement/ReleaseDevices/main.go)
+
+### Poll an org device activity
+
+Every activity is asynchronous — the create call returns `IN_PROGRESS`. Poll the returned
+ID for the outcome. `completedDateTime` and `downloadUrl` (a presigned URL to the
+per-serial-number activity log, in CSV) appear only once the status is `COMPLETED`.
+Apple retains activities for 30 days.
+
+```go
+activity, _, err := c.AXMAPI.DeviceManagement.GetOrgDeviceActivityByIDV1(ctx, activityID, &devicemanagement.GetOrgDeviceActivityQueryOptions{
+    Fields: []string{
+        devicemanagement.FieldActivityStatus,
+        devicemanagement.FieldActivitySubStatus,
+        devicemanagement.FieldActivityCompletedDateTime,
+        devicemanagement.FieldActivityDownloadURL,
+    },
+})
+if err != nil {
+    log.Fatalf("Error: %v", err)
+}
+
+switch activity.Data.Attributes.Status {
+case devicemanagement.ActivityStatusCompleted:
+    fmt.Printf("Activity log: %s\n", activity.Data.Attributes.DownloadURL)
+case devicemanagement.ActivityStatusFailed, devicemanagement.ActivityStatusStopped:
+    fmt.Printf("Activity ended: %s\n", activity.Data.Attributes.SubStatus)
+default:
+    fmt.Println("Still in progress")
+}
+```
+
+See full example: [GetOrgDeviceActivity/main.go](./devicemanagement/GetOrgDeviceActivity/main.go)
+
 ---
 
 ## Error Handling

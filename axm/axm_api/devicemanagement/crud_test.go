@@ -2,6 +2,7 @@ package devicemanagement
 
 import (
 	"context"
+	"encoding/json"
 	"testing"
 	"time"
 
@@ -1036,4 +1037,432 @@ func TestMDMServerFieldConstants(t *testing.T) {
 func TestMDMServerStatusConstants(t *testing.T) {
 	assert.Equal(t, "ACTIVE", MDMServerStatusActive)
 	assert.Equal(t, "INACTIVE", MDMServerStatusInactive)
+}
+
+// ====== ORG DEVICE ACTIVITY TESTS ======
+
+// migrationDeadline is a fixed deadline used across the migration tests.
+var migrationDeadline = time.Date(2026, 3, 15, 17, 0, 0, 0, time.UTC)
+
+// newMigrationRequest builds an OrgDeviceActivityCreateRequest for the given activity
+// type, attaching an MDM server relationship and metadata only when they are supplied.
+func newMigrationRequest(activityType, mdmServerID string, deadline *time.Time, deviceIDs []string) *OrgDeviceActivityCreateRequest {
+	req := &OrgDeviceActivityCreateRequest{
+		Data: OrgDeviceActivityData{
+			Type: ResourceTypeOrgDeviceActivities,
+			Attributes: OrgDeviceActivityCreateAttributes{
+				ActivityType: activityType,
+			},
+			Relationships: OrgDeviceActivityCreateRelationships{
+				Devices: &OrgDeviceActivityDevicesRelationship{
+					Data: deviceLinkages(deviceIDs),
+				},
+			},
+		},
+	}
+
+	if mdmServerID != "" {
+		req.Data.Relationships.MDMServer = &OrgDeviceActivityMDMServerRelationship{
+			Data: OrgDeviceActivityMDMServerLinkage{
+				Type: ResourceTypeMDMServers,
+				ID:   mdmServerID,
+			},
+		}
+	}
+
+	if deadline != nil {
+		req.Data.Attributes.ActivityTypeMetadata = &ActivityTypeMetadata{
+			MDMMigrationDeadlineDateTime: deadline,
+		}
+	}
+
+	return req
+}
+
+func TestCreateOrgDeviceActivity_AssignWithMigrationDeadline_Success(t *testing.T) {
+	client := setupMockClient(t)
+	mockHandler := &mocks.DeviceManagementMock{}
+	mockHandler.RegisterMocks()
+	defer mockHandler.CleanupMockState()
+
+	ctx := context.Background()
+	req := newMigrationRequest(
+		ActivityTypeAssignDevicesWithMDMMigrationDeadline,
+		"a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		&migrationDeadline,
+		[]string{"C39J8W1H3VG5", "F2KZ3N4G5HD3"},
+	)
+
+	result, resp, err := client.CreateOrgDeviceActivityV1(ctx, req)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 201, resp.StatusCode())
+	require.NotNil(t, result)
+	assert.Equal(t, "orgDeviceActivities", result.Data.Type)
+	assert.NotEmpty(t, result.Data.ID)
+	require.NotNil(t, result.Data.Attributes)
+	assert.Equal(t, ActivityStatusInProgress, result.Data.Attributes.Status)
+	assert.Equal(t, ActivitySubStatusSubmitted, result.Data.Attributes.SubStatus)
+	assert.Equal(t, 1, httpmock.GetTotalCallCount())
+}
+
+func TestCreateOrgDeviceActivity_UpdateMigrationDeadline_Success(t *testing.T) {
+	client := setupMockClient(t)
+	mockHandler := &mocks.DeviceManagementMock{}
+	mockHandler.RegisterMocks()
+	defer mockHandler.CleanupMockState()
+
+	ctx := context.Background()
+	req := newMigrationRequest(
+		ActivityTypeUpdateMDMMigrationDeadline,
+		"", // no mdmServer relationship for this activity type
+		&migrationDeadline,
+		[]string{"C39J8W1H3VG5"},
+	)
+
+	result, resp, err := client.CreateOrgDeviceActivityV1(ctx, req)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 201, resp.StatusCode())
+	require.NotNil(t, result)
+	assert.Equal(t, ActivityStatusInProgress, result.Data.Attributes.Status)
+	assert.Equal(t, 1, httpmock.GetTotalCallCount())
+}
+
+func TestCreateOrgDeviceActivity_CancelMigration_Success(t *testing.T) {
+	client := setupMockClient(t)
+	mockHandler := &mocks.DeviceManagementMock{}
+	mockHandler.RegisterMocks()
+	defer mockHandler.CleanupMockState()
+
+	ctx := context.Background()
+	req := newMigrationRequest(ActivityTypeCancelMDMMigration, "", nil, []string{"C39J8W1H3VG5"})
+
+	result, resp, err := client.CreateOrgDeviceActivityV1(ctx, req)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 201, resp.StatusCode())
+	require.NotNil(t, result)
+	assert.Equal(t, ActivityStatusInProgress, result.Data.Attributes.Status)
+	assert.Equal(t, 1, httpmock.GetTotalCallCount())
+}
+
+func TestCreateOrgDeviceActivity_ReleaseDevices_Success(t *testing.T) {
+	client := setupMockClient(t)
+	mockHandler := &mocks.DeviceManagementMock{}
+	mockHandler.RegisterMocks()
+	defer mockHandler.CleanupMockState()
+
+	ctx := context.Background()
+	req := newMigrationRequest(ActivityTypeReleaseDevices, "", nil, []string{"XABC123X0ABC123X0"})
+
+	result, resp, err := client.CreateOrgDeviceActivityV1(ctx, req)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 201, resp.StatusCode())
+	require.NotNil(t, result)
+	assert.Equal(t, "orgDeviceActivities", result.Data.Type)
+	assert.Equal(t, ActivityStatusInProgress, result.Data.Attributes.Status)
+	assert.Equal(t, 1, httpmock.GetTotalCallCount())
+}
+
+func TestCreateOrgDeviceActivity_NilRequest(t *testing.T) {
+	client := setupMockClient(t)
+	mockHandler := &mocks.DeviceManagementMock{}
+	mockHandler.RegisterMocks()
+	defer mockHandler.CleanupMockState()
+
+	result, _, err := client.CreateOrgDeviceActivityV1(context.Background(), nil)
+
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "request is required")
+	assert.Equal(t, 0, httpmock.GetTotalCallCount())
+}
+
+func TestCreateOrgDeviceActivity_EmptyActivityType(t *testing.T) {
+	client := setupMockClient(t)
+	mockHandler := &mocks.DeviceManagementMock{}
+	mockHandler.RegisterMocks()
+	defer mockHandler.CleanupMockState()
+
+	req := newMigrationRequest("", "", nil, []string{"C39J8W1H3VG5"})
+
+	result, _, err := client.CreateOrgDeviceActivityV1(context.Background(), req)
+
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "activity type is required")
+	assert.Equal(t, 0, httpmock.GetTotalCallCount())
+}
+
+func TestCreateOrgDeviceActivity_NoDevices(t *testing.T) {
+	client := setupMockClient(t)
+	mockHandler := &mocks.DeviceManagementMock{}
+	mockHandler.RegisterMocks()
+	defer mockHandler.CleanupMockState()
+
+	req := newMigrationRequest(ActivityTypeCancelMDMMigration, "", nil, []string{})
+
+	result, _, err := client.CreateOrgDeviceActivityV1(context.Background(), req)
+
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "at least one device ID is required")
+	assert.Equal(t, 0, httpmock.GetTotalCallCount())
+}
+
+func TestCreateOrgDeviceActivity_NilDevicesRelationship(t *testing.T) {
+	client := setupMockClient(t)
+	mockHandler := &mocks.DeviceManagementMock{}
+	mockHandler.RegisterMocks()
+	defer mockHandler.CleanupMockState()
+
+	req := &OrgDeviceActivityCreateRequest{
+		Data: OrgDeviceActivityData{
+			Type: ResourceTypeOrgDeviceActivities,
+			Attributes: OrgDeviceActivityCreateAttributes{
+				ActivityType: ActivityTypeReleaseDevices,
+			},
+		},
+	}
+
+	result, _, err := client.CreateOrgDeviceActivityV1(context.Background(), req)
+
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "at least one device ID is required")
+	assert.Equal(t, 0, httpmock.GetTotalCallCount())
+}
+
+// TestOrgDeviceActivityCreateRequest_WireFormat verifies the marshalled request body
+// matches Apple's documented examples, in particular that mdmServer is omitted for the
+// activity types that do not take one, and that the migration deadline serialises as
+// an ISO 8601 / RFC 3339 timestamp.
+func TestOrgDeviceActivityCreateRequest_WireFormat(t *testing.T) {
+	t.Run("AssignDevicesWithMigrationDeadline", func(t *testing.T) {
+		req := newMigrationRequest(
+			ActivityTypeAssignDevicesWithMDMMigrationDeadline,
+			"a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+			&migrationDeadline,
+			[]string{"C39J8W1H3VG5", "F2KZ3N4G5HD3"},
+		)
+
+		body, err := json.Marshal(req)
+		require.NoError(t, err)
+
+		var decoded map[string]any
+		require.NoError(t, json.Unmarshal(body, &decoded))
+
+		data := decoded["data"].(map[string]any)
+		assert.Equal(t, "orgDeviceActivities", data["type"])
+
+		attributes := data["attributes"].(map[string]any)
+		assert.Equal(t, "ASSIGN_DEVICES_WITH_MDM_MIGRATION_DEADLINE", attributes["activityType"])
+
+		metadata := attributes["activityTypeMetadata"].(map[string]any)
+		assert.Equal(t, "2026-03-15T17:00:00Z", metadata["mdmMigrationDeadlineDateTime"])
+
+		relationships := data["relationships"].(map[string]any)
+		mdmServer := relationships["mdmServer"].(map[string]any)["data"].(map[string]any)
+		assert.Equal(t, "mdmServers", mdmServer["type"])
+		assert.Equal(t, "a1b2c3d4-e5f6-7890-abcd-ef1234567890", mdmServer["id"])
+
+		devices := relationships["devices"].(map[string]any)["data"].([]any)
+		require.Len(t, devices, 2)
+		assert.Equal(t, "orgDevices", devices[0].(map[string]any)["type"])
+		assert.Equal(t, "C39J8W1H3VG5", devices[0].(map[string]any)["id"])
+	})
+
+	t.Run("UpdateMigrationDeadlineOmitsMDMServer", func(t *testing.T) {
+		req := newMigrationRequest(ActivityTypeUpdateMDMMigrationDeadline, "", &migrationDeadline, []string{"C39J8W1H3VG5"})
+
+		body, err := json.Marshal(req)
+		require.NoError(t, err)
+
+		var decoded map[string]any
+		require.NoError(t, json.Unmarshal(body, &decoded))
+
+		relationships := decoded["data"].(map[string]any)["relationships"].(map[string]any)
+		assert.NotContains(t, relationships, "mdmServer")
+		assert.Contains(t, relationships, "devices")
+	})
+
+	t.Run("CancelMigrationOmitsMDMServerAndMetadata", func(t *testing.T) {
+		req := newMigrationRequest(ActivityTypeCancelMDMMigration, "", nil, []string{"C39J8W1H3VG5"})
+
+		body, err := json.Marshal(req)
+		require.NoError(t, err)
+
+		var decoded map[string]any
+		require.NoError(t, json.Unmarshal(body, &decoded))
+
+		data := decoded["data"].(map[string]any)
+		assert.NotContains(t, data["attributes"].(map[string]any), "activityTypeMetadata")
+		assert.NotContains(t, data["relationships"].(map[string]any), "mdmServer")
+	})
+
+	t.Run("ReleaseDevicesOmitsMDMServerAndMetadata", func(t *testing.T) {
+		req := newMigrationRequest(ActivityTypeReleaseDevices, "", nil, []string{"XABC123X0ABC123X0"})
+
+		body, err := json.Marshal(req)
+		require.NoError(t, err)
+
+		var decoded map[string]any
+		require.NoError(t, json.Unmarshal(body, &decoded))
+
+		data := decoded["data"].(map[string]any)
+		assert.Equal(t, "RELEASE_DEVICES", data["attributes"].(map[string]any)["activityType"])
+		assert.NotContains(t, data["attributes"].(map[string]any), "activityTypeMetadata")
+		assert.NotContains(t, data["relationships"].(map[string]any), "mdmServer")
+	})
+}
+
+func TestGetOrgDeviceActivityByID_Success(t *testing.T) {
+	client := setupMockClient(t)
+	mockHandler := &mocks.DeviceManagementMock{}
+	mockHandler.RegisterMocks()
+	defer mockHandler.CleanupMockState()
+
+	ctx := context.Background()
+	result, resp, err := client.GetOrgDeviceActivityByIDV1(ctx, mocks.SeededOrgDeviceActivityID, nil)
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode())
+	require.NotNil(t, result)
+	assert.Equal(t, mocks.SeededOrgDeviceActivityID, result.Data.ID)
+	assert.Equal(t, "orgDeviceActivities", result.Data.Type)
+
+	require.NotNil(t, result.Data.Attributes)
+	assert.Equal(t, ActivityStatusCompleted, result.Data.Attributes.Status)
+	assert.Equal(t, ActivitySubStatusCompletedWithSuccess, result.Data.Attributes.SubStatus)
+	require.NotNil(t, result.Data.Attributes.CreatedDateTime)
+	require.NotNil(t, result.Data.Attributes.CompletedDateTime)
+	assert.NotEmpty(t, result.Data.Attributes.DownloadURL)
+	assert.Equal(t, 1, httpmock.GetTotalCallCount())
+}
+
+func TestGetOrgDeviceActivityByID_WithFieldSelection(t *testing.T) {
+	client := setupMockClient(t)
+	mockHandler := &mocks.DeviceManagementMock{}
+	mockHandler.RegisterMocks()
+	defer mockHandler.CleanupMockState()
+
+	ctx := context.Background()
+	result, resp, err := client.GetOrgDeviceActivityByIDV1(ctx, mocks.SeededOrgDeviceActivityID, &GetOrgDeviceActivityQueryOptions{
+		Fields: []string{
+			FieldActivityStatus,
+			FieldActivitySubStatus,
+			FieldActivityCompletedDateTime,
+			FieldActivityDownloadURL,
+		},
+	})
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode())
+	require.NotNil(t, result)
+	assert.Equal(t, "status,subStatus,completedDateTime,downloadUrl", resp.Request.QueryParams.Get("fields[orgDeviceActivities]"))
+	assert.Equal(t, 1, httpmock.GetTotalCallCount())
+}
+
+func TestGetOrgDeviceActivityByID_EmptyActivityID(t *testing.T) {
+	client := setupMockClient(t)
+	mockHandler := &mocks.DeviceManagementMock{}
+	mockHandler.RegisterMocks()
+	defer mockHandler.CleanupMockState()
+
+	result, _, err := client.GetOrgDeviceActivityByIDV1(context.Background(), "", nil)
+
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Contains(t, err.Error(), "activity ID is required")
+	assert.Equal(t, 0, httpmock.GetTotalCallCount())
+}
+
+func TestGetOrgDeviceActivityByID_NotFound(t *testing.T) {
+	client := setupMockClient(t)
+	mockHandler := &mocks.DeviceManagementMock{}
+	mockHandler.RegisterMocks()
+	defer mockHandler.CleanupMockState()
+
+	result, resp, err := client.GetOrgDeviceActivityByIDV1(context.Background(), "does-not-exist", nil)
+
+	require.Error(t, err)
+	assert.Nil(t, result)
+	require.NotNil(t, resp)
+	assert.Equal(t, 404, resp.StatusCode())
+}
+
+// TestCreateOrgDeviceActivity_RoundTripPolling covers the intended migration workflow:
+// create an activity, then read it back by the ID the API returned.
+func TestCreateOrgDeviceActivity_RoundTripPolling(t *testing.T) {
+	client := setupMockClient(t)
+	mockHandler := &mocks.DeviceManagementMock{}
+	mockHandler.RegisterMocks()
+	defer mockHandler.CleanupMockState()
+
+	ctx := context.Background()
+	created, _, err := client.CreateOrgDeviceActivityV1(ctx, newMigrationRequest(
+		ActivityTypeAssignDevicesWithMDMMigrationDeadline,
+		"a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		&migrationDeadline,
+		[]string{"C39J8W1H3VG5"},
+	))
+	require.NoError(t, err)
+	require.NotEmpty(t, created.Data.ID)
+
+	fetched, resp, err := client.GetOrgDeviceActivityByIDV1(ctx, created.Data.ID, nil)
+
+	require.NoError(t, err)
+	assert.Equal(t, 200, resp.StatusCode())
+	require.NotNil(t, fetched)
+	assert.Equal(t, created.Data.ID, fetched.Data.ID)
+	assert.Equal(t, 2, httpmock.GetTotalCallCount())
+}
+
+func TestOrgDeviceActivityFieldConstants(t *testing.T) {
+	assert.Equal(t, "status", FieldActivityStatus)
+	assert.Equal(t, "subStatus", FieldActivitySubStatus)
+	assert.Equal(t, "createdDateTime", FieldActivityCreatedDateTime)
+	assert.Equal(t, "completedDateTime", FieldActivityCompletedDateTime)
+	assert.Equal(t, "downloadUrl", FieldActivityDownloadURL)
+}
+
+func TestResourceTypeConstants(t *testing.T) {
+	assert.Equal(t, "orgDeviceActivities", ResourceTypeOrgDeviceActivities)
+	assert.Equal(t, "mdmServers", ResourceTypeMDMServers)
+	assert.Equal(t, "orgDevices", ResourceTypeOrgDevices)
+}
+
+func TestMigrationActivityTypeConstants(t *testing.T) {
+	assert.Equal(t, "ASSIGN_DEVICES_WITH_MDM_MIGRATION_DEADLINE", ActivityTypeAssignDevicesWithMDMMigrationDeadline)
+	assert.Equal(t, "UPDATE_MDM_MIGRATION_DEADLINE", ActivityTypeUpdateMDMMigrationDeadline)
+	assert.Equal(t, "CANCEL_MDM_MIGRATION", ActivityTypeCancelMDMMigration)
+	assert.Equal(t, "RELEASE_DEVICES", ActivityTypeReleaseDevices)
+}
+
+func TestActivityStatusAndSubStatusConstants(t *testing.T) {
+	// Full status set
+	assert.Equal(t, "COMPLETED", ActivityStatusCompleted)
+	assert.Equal(t, "IN_PROGRESS", ActivityStatusInProgress)
+	assert.Equal(t, "STOPPED", ActivityStatusStopped)
+	assert.Equal(t, "FAILED", ActivityStatusFailed)
+
+	// Full sub-status set
+	assert.Equal(t, "SUBMITTED", ActivitySubStatusSubmitted)
+	assert.Equal(t, "PRE_PROCESSING", ActivitySubStatusPreProcessing)
+	assert.Equal(t, "PENDING", ActivitySubStatusPending)
+	assert.Equal(t, "PROCESSING", ActivitySubStatusProcessing)
+	assert.Equal(t, "POST_PROCESSING", ActivitySubStatusPostProcessing)
+	assert.Equal(t, "STOPPING", ActivitySubStatusStopping)
+	assert.Equal(t, "COMPLETED_WITH_SUCCESS", ActivitySubStatusCompletedWithSuccess)
+	assert.Equal(t, "COMPLETED_WITH_ERROR", ActivitySubStatusCompletedWithError)
+	assert.Equal(t, "COMPLETED_WITH_FAILURE", ActivitySubStatusCompletedWithFailure)
+	assert.Equal(t, "COMPLETED_POST_PROCESSING_FAILED", ActivitySubStatusCompletedPostProcessingFailed)
 }

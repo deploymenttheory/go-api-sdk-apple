@@ -51,6 +51,15 @@ type OrgDeviceAttributes struct {
 	PurchaseSourceId    string     `json:"purchaseSourceId,omitempty"`
 	PurchaseSourceType  string     `json:"purchaseSourceType,omitempty"`
 	AssignedServer      string     `json:"assignedServer,omitempty"`
+
+	// ReleasedFromOrgDateTime is set once the device has been released from the
+	// organization. Only populated when querying a single device.
+	ReleasedFromOrgDateTime *time.Time `json:"releasedFromOrgDateTime,omitempty"`
+
+	// Device management service migration attributes (read-only).
+	IsMdmMigrationCapable        bool       `json:"isMdmMigrationCapable,omitempty"`
+	MdmMigrationStatus           string     `json:"mdmMigrationStatus,omitempty"`
+	MdmMigrationDeadlineDateTime *time.Time `json:"mdmMigrationDeadlineDateTime,omitempty"`
 }
 
 // OrgDeviceResponse represents the response for a single device
@@ -77,10 +86,12 @@ type OrgDevicesResponse struct {
 // RequestQueryOptions represents the query parameters for getting organization devices
 type RequestQueryOptions struct {
 	// Field selection - fields to return for orgDevices
-	// Possible values: serialNumber, addedToOrgDateTime, updatedDateTime, deviceModel,
-	// productFamily, productType, deviceCapacity, partNumber, orderNumber, color, status,
-	// orderDateTime, imei, meid, eid, wifiMacAddress, bluetoothMacAddress, ethernetMacAddress,
-	// purchaseSourceId, purchaseSourceType, assignedServer
+	// Possible values: serialNumber, addedToOrgDateTime, releasedFromOrgDateTime,
+	// updatedDateTime, deviceModel, productFamily, productType, deviceCapacity, partNumber,
+	// orderNumber, color, status, orderDateTime, imei, meid, eid, wifiMacAddress,
+	// bluetoothMacAddress, ethernetMacAddress, purchaseSourceId, purchaseSourceType,
+	// assignedServer, appleCareCoverage, isMdmMigrationCapable, mdmMigrationStatus,
+	// mdmMigrationDeadlineDateTime
 	Fields []string `json:"fields,omitempty"`
 
 	// Limit the number of included related resources to return (max 1000)

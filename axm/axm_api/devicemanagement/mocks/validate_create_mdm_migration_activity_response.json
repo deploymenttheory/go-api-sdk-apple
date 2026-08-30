@@ -1,0 +1,17 @@
+{
+  "data": {
+    "type": "orgDeviceActivities",
+    "id": "f7e6d5c4-b3a2-1098-fedc-ba9876543210",
+    "attributes": {
+      "status": "IN_PROGRESS",
+      "subStatus": "SUBMITTED",
+      "createdDateTime": "2026-02-27T18:00:00.000Z"
+    },
+    "links": {
+      "self": "https://api-business.apple.com/v1/orgDeviceActivities/f7e6d5c4-b3a2-1098-fedc-ba9876543210"
+    }
+  },
+  "links": {
+    "self": "https://api-business.apple.com/v1/orgDeviceActivities"
+  }
+}

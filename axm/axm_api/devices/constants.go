@@ -55,6 +55,23 @@ const (
 	FieldPurchaseSourceId    = "purchaseSourceId"
 	FieldPurchaseSourceType  = "purchaseSourceType"
 	FieldAssignedServer      = "assignedServer"
+	FieldAppleCareCoverage   = "appleCareCoverage"
+
+	FieldReleasedFromOrgDateTime = "releasedFromOrgDateTime"
+
+	FieldIsMdmMigrationCapable        = "isMdmMigrationCapable"
+	FieldMdmMigrationStatus           = "mdmMigrationStatus"
+	FieldMdmMigrationDeadlineDateTime = "mdmMigrationDeadlineDateTime"
+)
+
+// MdmMigrationStatus constants for the mdmMigrationStatus field. Present only when a
+// device management service migration has been requested for the device.
+// https://developer.apple.com/documentation/applebusinessapi/mdmmigrationstatus
+const (
+	MdmMigrationStatusRequested = "REQUESTED"
+	MdmMigrationStatusStarted   = "STARTED"
+	MdmMigrationStatusSuccess   = "SUCCESS"
+	MdmMigrationStatusFailed    = "FAILED"
 )
 
 // Device status constants

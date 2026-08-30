@@ -70,7 +70,7 @@ type MDMServerCreateRequest struct {
 
 // MDMServerCreateRequestData is the data object for an MDM server create request
 type MDMServerCreateRequestData struct {
-	Type       string                          `json:"type"` // must be "mdmServers"
+	Type       string                           `json:"type"` // must be "mdmServers"
 	Attributes MDMServerCreateRequestAttributes `json:"attributes"`
 }
 
@@ -89,8 +89,8 @@ type MDMServerUpdateRequest struct {
 
 // MDMServerUpdateRequestData is the data object for an MDM server update request
 type MDMServerUpdateRequestData struct {
-	Type       string                          `json:"type"` // must be "mdmServers"
-	ID         string                          `json:"id"`
+	Type       string                           `json:"type"` // must be "mdmServers"
+	ID         string                           `json:"id"`
 	Attributes MDMServerUpdateRequestAttributes `json:"attributes"`
 }
 
@@ -145,12 +145,17 @@ type OrgDeviceActivity struct {
 	Links      *OrgDeviceActivityLinks      `json:"links,omitempty"`
 }
 
-// OrgDeviceActivityAttributes contains the activity attributes
+// OrgDeviceActivityAttributes contains the activity attributes.
+//
+// CompletedDateTime and DownloadURL are populated only once Status is COMPLETED.
+// DownloadURL is a presigned URL for the activity log in CSV format.
 type OrgDeviceActivityAttributes struct {
-	Status          string     `json:"status,omitempty"`
-	SubStatus       string     `json:"subStatus,omitempty"`
-	CreatedDateTime *time.Time `json:"createdDateTime,omitempty"`
-	ActivityType    string     `json:"activityType,omitempty"`
+	Status            string     `json:"status,omitempty"`
+	SubStatus         string     `json:"subStatus,omitempty"`
+	CreatedDateTime   *time.Time `json:"createdDateTime,omitempty"`
+	CompletedDateTime *time.Time `json:"completedDateTime,omitempty"`
+	DownloadURL       string     `json:"downloadUrl,omitempty"`
+	ActivityType      string     `json:"activityType,omitempty"`
 }
 
 // OrgDeviceActivityLinks contains activity navigation links
@@ -180,7 +185,18 @@ type OrgDeviceActivityData struct {
 
 // OrgDeviceActivityCreateAttributes contains the activity creation attributes
 type OrgDeviceActivityCreateAttributes struct {
-	ActivityType string `json:"activityType"`
+	ActivityType         string                `json:"activityType"`
+	ActivityTypeMetadata *ActivityTypeMetadata `json:"activityTypeMetadata,omitempty"`
+}
+
+// ActivityTypeMetadata carries the additional data required by certain activity types.
+// It is required for ASSIGN_DEVICES_WITH_MDM_MIGRATION_DEADLINE and
+// UPDATE_MDM_MIGRATION_DEADLINE, and unused by the other activity types.
+type ActivityTypeMetadata struct {
+	// MDMMigrationDeadlineDateTime is the deadline by which a device needs to
+	// complete its device management service migration. The API rejects deadlines
+	// more than 90 days in the future.
+	MDMMigrationDeadlineDateTime *time.Time `json:"mdmMigrationDeadlineDateTime,omitempty"`
 }
 
 // OrgDeviceActivityCreateRelationships contains the relationships for activity creation
@@ -242,4 +258,11 @@ type RequestQueryOptions struct {
 
 	// Limit the number of included related resources to return (max 1000)
 	Limit int `json:"limit,omitempty"`
+}
+
+// GetOrgDeviceActivityQueryOptions represents the query parameters for
+// GetOrgDeviceActivityByIDV1.
+type GetOrgDeviceActivityQueryOptions struct {
+	// Fields specifies which fields to return. Use FieldActivity* constants.
+	Fields []string
 }
