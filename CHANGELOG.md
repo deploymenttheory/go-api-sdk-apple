@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0](https://github.com/deploymenttheory/go-sdk-appleservices/compare/v0.8.1...v0.9.0) (2026-08-30)
+
+
+### Features
+
+* **axm:** add device management service migration and device release ([a06fba4](https://github.com/deploymenttheory/go-sdk-appleservices/commit/a06fba43d45864a081b3cde457d1ca1445d10eee))
+* **axm:** add device management service migration and device release ([de438ba](https://github.com/deploymenttheory/go-sdk-appleservices/commit/de438ba8355e0348f2be83ea3ceb124e7113c969))
+
 ## [0.8.1](https://github.com/deploymenttheory/go-sdk-appleservices/compare/v0.8.0...v0.8.1) (2026-08-29)
 
 
