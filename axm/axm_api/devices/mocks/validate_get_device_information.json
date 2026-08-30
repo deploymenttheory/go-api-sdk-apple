@@ -23,7 +23,10 @@
       ],
       "eid": "89049037640158663184237812557346",
       "purchaseSourceId": "-2085650007946880",
-      "purchaseSourceType": "APPLE"
+      "purchaseSourceType": "APPLE",
+      "isMdmMigrationCapable": true,
+      "mdmMigrationStatus": "REQUESTED",
+      "mdmMigrationDeadlineDateTime": "2026-03-15T17:00:00.000Z"
     },
     "relationships": {
       "assignedServer": {

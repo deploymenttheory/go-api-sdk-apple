@@ -493,3 +493,244 @@ func requireAssignedDevice(t *testing.T, svc *devicemanagement.DeviceManagement,
 	t.Skip("No devices with an assigned MDM server found — skipping test")
 	return "", "" // unreachable
 }
+
+// =============================================================================
+// TestAcceptance_DeviceManagement_GetOrgDeviceActivity_ValidationErrors
+// Verifies client-side validation on the org device activity endpoints. Makes no
+// state-changing calls, so it is safe to run against a production tenant.
+// =============================================================================
+
+func TestAcceptance_DeviceManagement_GetOrgDeviceActivity_ValidationErrors(t *testing.T) {
+	acc.RequireClient(t)
+
+	svc := acc.Client.AXMAPI.DeviceManagement
+	ctx := context.Background()
+
+	t.Run("GetOrgDeviceActivityByID_EmptyID", func(t *testing.T) {
+		result, _, err := svc.GetOrgDeviceActivityByIDV1(ctx, "", nil)
+		require.Error(t, err)
+		assert.Nil(t, result)
+		assert.Contains(t, err.Error(), "activity ID is required")
+	})
+
+	t.Run("CreateOrgDeviceActivity_NilRequest", func(t *testing.T) {
+		result, _, err := svc.CreateOrgDeviceActivityV1(ctx, nil)
+		require.Error(t, err)
+		assert.Nil(t, result)
+		assert.Contains(t, err.Error(), "request is required")
+	})
+
+	t.Run("CreateOrgDeviceActivity_NoDevices", func(t *testing.T) {
+		result, _, err := svc.CreateOrgDeviceActivityV1(ctx, &devicemanagement.OrgDeviceActivityCreateRequest{
+			Data: devicemanagement.OrgDeviceActivityData{
+				Type: devicemanagement.ResourceTypeOrgDeviceActivities,
+				Attributes: devicemanagement.OrgDeviceActivityCreateAttributes{
+					ActivityType: devicemanagement.ActivityTypeCancelMDMMigration,
+				},
+			},
+		})
+		require.Error(t, err)
+		assert.Nil(t, result)
+		assert.Contains(t, err.Error(), "at least one device ID is required")
+	})
+}
+
+// =============================================================================
+// TestAcceptance_DeviceManagement_MDMMigration_Lifecycle
+// Schedules a device management service migration for a migration-capable device,
+// polls the resulting activity to completion, updates the deadline, then cancels
+// the migration. Destructive: it reassigns a real device between MDM services.
+// =============================================================================
+
+func TestAcceptance_DeviceManagement_MDMMigration_Lifecycle(t *testing.T) {
+	acc.RequireClient(t)
+	if acc.Config.SkipDestructive {
+		t.Skip("destructive tests skipped (AXM_SKIP_DESTRUCTIVE=true) — set AXM_SKIP_DESTRUCTIVE=false to run")
+	}
+
+	svc := acc.Client.AXMAPI.DeviceManagement
+	devSvc := acc.Client.AXMAPI.Devices
+	ctx := context.Background()
+
+	// -- Find a target MDM server --
+	serverID, serverName := requireFirstMDMServer(t, svc, ctx)
+	acc.LogTestStage(t, "Setup", "Target MDM server: %q (ID=%s)", serverName, serverID)
+
+	// -- Find a device eligible for device management service migration --
+	acc.LogTestStage(t, "Setup", "Searching for a migration-capable device...")
+
+	listCtx, listCancel := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer listCancel()
+
+	devList, _, err := devSvc.GetV1(listCtx, &devices.RequestQueryOptions{
+		Fields: []string{
+			devices.FieldSerialNumber,
+			devices.FieldIsMdmMigrationCapable,
+			devices.FieldMdmMigrationStatus,
+		},
+		Limit: 50,
+	})
+	require.NoError(t, err, "list devices")
+
+	var migrationDeviceID string
+	for _, dev := range devList.Data {
+		if dev.Attributes == nil {
+			continue
+		}
+		// Skip devices already undergoing a migration.
+		if dev.Attributes.IsMdmMigrationCapable && dev.Attributes.MdmMigrationStatus == "" {
+			migrationDeviceID = dev.ID
+			break
+		}
+	}
+
+	if migrationDeviceID == "" {
+		t.Skip("No migration-capable device found — skipping migration lifecycle test")
+	}
+
+	acc.LogTestStage(t, "Setup", "Migration-capable device: ID=%s", migrationDeviceID)
+
+	// Always attempt to cancel the migration at teardown, whatever the outcome.
+	acc.Cleanup(t, func() {
+		cleanCtx, cleanCancel := context.WithTimeout(context.Background(), 15*time.Second)
+		defer cleanCancel()
+		_, _, cancelErr := svc.CreateOrgDeviceActivityV1(cleanCtx, newActivityRequest(
+			devicemanagement.ActivityTypeCancelMDMMigration, "", nil, []string{migrationDeviceID},
+		))
+		acc.LogCleanupError(t, "mdm migration", fmt.Sprintf("device=%s", migrationDeviceID), cancelErr)
+	})
+
+	// ------------------------------------------------------------------
+	// 1. Schedule the migration with a deadline
+	// ------------------------------------------------------------------
+	deadline := time.Now().UTC().Add(7 * 24 * time.Hour)
+	acc.LogTestStage(t, "Schedule", "Scheduling migration of device %s to %q by %s",
+		migrationDeviceID, serverName, deadline.Format(time.RFC3339))
+
+	scheduleCtx, scheduleCancel := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer scheduleCancel()
+
+	scheduled, scheduleHTTPResp, err := svc.CreateOrgDeviceActivityV1(scheduleCtx, newActivityRequest(
+		devicemanagement.ActivityTypeAssignDevicesWithMDMMigrationDeadline,
+		serverID, &deadline, []string{migrationDeviceID},
+	))
+	require.NoError(t, err, "schedule migration")
+	require.NotNil(t, scheduleHTTPResp)
+	assert.Equal(t, 201, scheduleHTTPResp.StatusCode())
+	require.NotNil(t, scheduled)
+	require.NotEmpty(t, scheduled.Data.ID, "activity ID")
+	acc.LogTestSuccess(t, "Migration scheduled: activity=%s status=%s",
+		scheduled.Data.ID, scheduled.Data.Attributes.Status)
+
+	// ------------------------------------------------------------------
+	// 2. Poll the activity to completion
+	// ------------------------------------------------------------------
+	acc.LogTestStage(t, "Poll", "Polling activity %s for completion...", scheduled.Data.ID)
+
+	var finalStatus, finalSubStatus, downloadURL string
+	completed := acc.PollUntil(t, 2*time.Minute, 5*time.Second, func() bool {
+		pollCtx, pollCancel := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+		defer pollCancel()
+
+		activity, _, pollErr := svc.GetOrgDeviceActivityByIDV1(pollCtx, scheduled.Data.ID, nil)
+		if pollErr != nil || activity == nil || activity.Data.Attributes == nil {
+			return false
+		}
+
+		finalStatus = activity.Data.Attributes.Status
+		finalSubStatus = activity.Data.Attributes.SubStatus
+		downloadURL = activity.Data.Attributes.DownloadURL
+
+		return finalStatus == devicemanagement.ActivityStatusCompleted ||
+			finalStatus == devicemanagement.ActivityStatusFailed ||
+			finalStatus == devicemanagement.ActivityStatusStopped
+	})
+
+	if !completed {
+		acc.LogTestWarning(t, "Activity %s did not reach a terminal status within the poll window (last status=%s)",
+			scheduled.Data.ID, finalStatus)
+	} else {
+		acc.LogTestSuccess(t, "Activity %s finished: status=%s subStatus=%s", scheduled.Data.ID, finalStatus, finalSubStatus)
+		assert.Equal(t, devicemanagement.ActivityStatusCompleted, finalStatus,
+			"migration activity should complete successfully")
+		// A COMPLETED activity exposes a presigned CSV activity log.
+		assert.NotEmpty(t, downloadURL, "completed activity should expose a downloadUrl")
+	}
+
+	// ------------------------------------------------------------------
+	// 3. Update the migration deadline
+	// ------------------------------------------------------------------
+	newDeadline := deadline.Add(24 * time.Hour)
+	acc.LogTestStage(t, "Update", "Updating migration deadline to %s", newDeadline.Format(time.RFC3339))
+
+	updateCtx, updateCancel := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer updateCancel()
+
+	updated, updateHTTPResp, err := svc.CreateOrgDeviceActivityV1(updateCtx, newActivityRequest(
+		devicemanagement.ActivityTypeUpdateMDMMigrationDeadline,
+		"", &newDeadline, []string{migrationDeviceID},
+	))
+	require.NoError(t, err, "update migration deadline")
+	require.NotNil(t, updateHTTPResp)
+	assert.Equal(t, 201, updateHTTPResp.StatusCode())
+	require.NotNil(t, updated)
+	acc.LogTestSuccess(t, "Deadline updated: activity=%s", updated.Data.ID)
+
+	// ------------------------------------------------------------------
+	// 4. Cancel the migration
+	// ------------------------------------------------------------------
+	acc.LogTestStage(t, "Cancel", "Cancelling migration for device %s", migrationDeviceID)
+
+	cancelCtx, cancelCancel := context.WithTimeout(ctx, acc.Config.RequestTimeout)
+	defer cancelCancel()
+
+	cancelled, cancelHTTPResp, err := svc.CreateOrgDeviceActivityV1(cancelCtx, newActivityRequest(
+		devicemanagement.ActivityTypeCancelMDMMigration, "", nil, []string{migrationDeviceID},
+	))
+	require.NoError(t, err, "cancel migration")
+	require.NotNil(t, cancelHTTPResp)
+	assert.Equal(t, 201, cancelHTTPResp.StatusCode())
+	require.NotNil(t, cancelled)
+	acc.LogTestSuccess(t, "Migration cancelled: activity=%s", cancelled.Data.ID)
+}
+
+// newActivityRequest builds an OrgDeviceActivityCreateRequest, attaching the MDM server
+// relationship and activity type metadata only when supplied.
+func newActivityRequest(activityType, mdmServerID string, deadline *time.Time, deviceIDs []string) *devicemanagement.OrgDeviceActivityCreateRequest {
+	linkages := make([]devicemanagement.OrgDeviceActivityDeviceLinkage, 0, len(deviceIDs))
+	for _, deviceID := range deviceIDs {
+		linkages = append(linkages, devicemanagement.OrgDeviceActivityDeviceLinkage{
+			Type: devicemanagement.ResourceTypeOrgDevices,
+			ID:   deviceID,
+		})
+	}
+
+	req := &devicemanagement.OrgDeviceActivityCreateRequest{
+		Data: devicemanagement.OrgDeviceActivityData{
+			Type: devicemanagement.ResourceTypeOrgDeviceActivities,
+			Attributes: devicemanagement.OrgDeviceActivityCreateAttributes{
+				ActivityType: activityType,
+			},
+			Relationships: devicemanagement.OrgDeviceActivityCreateRelationships{
+				Devices: &devicemanagement.OrgDeviceActivityDevicesRelationship{Data: linkages},
+			},
+		},
+	}
+
+	if mdmServerID != "" {
+		req.Data.Relationships.MDMServer = &devicemanagement.OrgDeviceActivityMDMServerRelationship{
+			Data: devicemanagement.OrgDeviceActivityMDMServerLinkage{
+				Type: devicemanagement.ResourceTypeMDMServers,
+				ID:   mdmServerID,
+			},
+		}
+	}
+
+	if deadline != nil {
+		req.Data.Attributes.ActivityTypeMetadata = &devicemanagement.ActivityTypeMetadata{
+			MDMMigrationDeadlineDateTime: deadline,
+		}
+	}
+
+	return req
+}

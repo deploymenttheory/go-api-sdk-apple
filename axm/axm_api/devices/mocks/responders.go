@@ -240,6 +240,11 @@ func (m *OrgDevicesMock) seedTestDevice() {
 			"eid":                "89049037640158663184237812557346",
 			"purchaseSourceId":   "-2085650007946880",
 			"purchaseSourceType": "APPLE",
+
+			// Device management service migration attributes (ASM 1.6 / ABM 2.3)
+			"isMdmMigrationCapable":        true,
+			"mdmMigrationStatus":           "REQUESTED",
+			"mdmMigrationDeadlineDateTime": "2026-03-15T17:00:00.000Z",
 		},
 		"relationships": map[string]any{
 			"assignedServer": map[string]any{

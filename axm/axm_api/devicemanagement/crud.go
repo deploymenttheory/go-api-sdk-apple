@@ -312,43 +312,41 @@ func (s *DeviceManagement) GetAssignedServerInfoByDeviceIDV1(ctx context.Context
 	return &result, resp, nil
 }
 
-// AssignDevicesV1 assigns devices to an MDM server.
-// URL: POST https://api-business.apple.com/v1/orgDeviceActivities
-// https://developer.apple.com/documentation/applebusinessmanagerapi/create-an-orgdeviceactivity
-func (s *DeviceManagement) AssignDevicesV1(ctx context.Context, mdmServerID string, deviceIDs []string) (*ResponseOrgDeviceActivity, *resty.Response, error) {
-	if mdmServerID == "" {
-		return nil, nil, fmt.Errorf("MDM server ID is required")
-	}
-	if len(deviceIDs) == 0 {
-		return nil, nil, fmt.Errorf("at least one device ID is required")
-	}
-
-	deviceLinkages := make([]OrgDeviceActivityDeviceLinkage, len(deviceIDs))
-	for i, deviceID := range deviceIDs {
-		deviceLinkages[i] = OrgDeviceActivityDeviceLinkage{
-			Type: "orgDevices",
+// deviceLinkages converts a slice of device IDs into orgDevices resource linkages.
+func deviceLinkages(deviceIDs []string) []OrgDeviceActivityDeviceLinkage {
+	linkages := make([]OrgDeviceActivityDeviceLinkage, 0, len(deviceIDs))
+	for _, deviceID := range deviceIDs {
+		linkages = append(linkages, OrgDeviceActivityDeviceLinkage{
+			Type: ResourceTypeOrgDevices,
 			ID:   deviceID,
-		}
+		})
 	}
+	return linkages
+}
 
-	request := &OrgDeviceActivityCreateRequest{
-		Data: OrgDeviceActivityData{
-			Type: "orgDeviceActivities",
-			Attributes: OrgDeviceActivityCreateAttributes{
-				ActivityType: ActivityTypeAssignDevices,
-			},
-			Relationships: OrgDeviceActivityCreateRelationships{
-				MDMServer: &OrgDeviceActivityMDMServerRelationship{
-					Data: OrgDeviceActivityMDMServerLinkage{
-						Type: "mdmServers",
-						ID:   mdmServerID,
-					},
-				},
-				Devices: &OrgDeviceActivityDevicesRelationship{
-					Data: deviceLinkages,
-				},
-			},
-		},
+// CreateOrgDeviceActivityV1 creates an organization device activity: assign or unassign
+// devices to a device management service, schedule, update or cancel a device management
+// service migration, or release devices from the organization.
+//
+// The activity is asynchronous. The response describes an IN_PROGRESS activity; poll
+// GetOrgDeviceActivityByIDV1 with the returned ID for the outcome.
+//
+// Activity-type semantics are enforced by the API, not by this method: mdmServer is
+// required for ASSIGN_DEVICES, UNASSIGN_DEVICES and
+// ASSIGN_DEVICES_WITH_MDM_MIGRATION_DEADLINE, activityTypeMetadata is required for the
+// two deadline activity types, and a migration deadline cannot be more than 90 days in
+// the future. The API returns 409 Conflict when any of these is violated.
+// URL: POST https://api-business.apple.com/v1/orgDeviceActivities
+// https://developer.apple.com/documentation/applebusinessapi/create-an-orgdeviceactivity
+func (s *DeviceManagement) CreateOrgDeviceActivityV1(ctx context.Context, req *OrgDeviceActivityCreateRequest) (*ResponseOrgDeviceActivity, *resty.Response, error) {
+	if req == nil {
+		return nil, nil, fmt.Errorf("request is required")
+	}
+	if req.Data.Attributes.ActivityType == "" {
+		return nil, nil, fmt.Errorf("activity type is required")
+	}
+	if req.Data.Relationships.Devices == nil || len(req.Data.Relationships.Devices.Data) == 0 {
+		return nil, nil, fmt.Errorf("at least one device ID is required")
 	}
 
 	var result ResponseOrgDeviceActivity
@@ -356,7 +354,7 @@ func (s *DeviceManagement) AssignDevicesV1(ctx context.Context, mdmServerID stri
 	resp, err := s.client.NewRequest(ctx).
 		SetHeader("Accept", constants.ApplicationJSON).
 		SetHeader("Content-Type", constants.ApplicationJSON).
-		SetBody(request).
+		SetBody(req).
 		SetResult(&result).
 		Post(constants.EndpointOrgDeviceActivities)
 
@@ -367,43 +365,25 @@ func (s *DeviceManagement) AssignDevicesV1(ctx context.Context, mdmServerID stri
 	return &result, resp, nil
 }
 
-// UnassignDevicesV1 unassigns devices from an MDM server.
-// URL: POST https://api-business.apple.com/v1/orgDeviceActivities
-// https://developer.apple.com/documentation/applebusinessmanagerapi/create-an-orgdeviceactivity
-func (s *DeviceManagement) UnassignDevicesV1(ctx context.Context, mdmServerID string, deviceIDs []string) (*ResponseOrgDeviceActivity, *resty.Response, error) {
-	if mdmServerID == "" {
-		return nil, nil, fmt.Errorf("MDM server ID is required")
+// GetOrgDeviceActivityByIDV1 retrieves the information for an organization device activity.
+//
+// The API retains activities for the past 30 days. completedDateTime and downloadUrl are
+// present only once the activity reaches a COMPLETED status.
+// URL: GET https://api-business.apple.com/v1/orgDeviceActivities/{id}
+// https://developer.apple.com/documentation/applebusinessapi/get-orgdeviceactivity-information
+func (s *DeviceManagement) GetOrgDeviceActivityByIDV1(ctx context.Context, activityID string, opts *GetOrgDeviceActivityQueryOptions) (*ResponseOrgDeviceActivity, *resty.Response, error) {
+	if activityID == "" {
+		return nil, nil, fmt.Errorf("activity ID is required")
 	}
-	if len(deviceIDs) == 0 {
-		return nil, nil, fmt.Errorf("at least one device ID is required")
-	}
-
-	deviceLinkages := make([]OrgDeviceActivityDeviceLinkage, len(deviceIDs))
-	for i, deviceID := range deviceIDs {
-		deviceLinkages[i] = OrgDeviceActivityDeviceLinkage{
-			Type: "orgDevices",
-			ID:   deviceID,
-		}
+	if opts == nil {
+		opts = &GetOrgDeviceActivityQueryOptions{}
 	}
 
-	request := &OrgDeviceActivityCreateRequest{
-		Data: OrgDeviceActivityData{
-			Type: "orgDeviceActivities",
-			Attributes: OrgDeviceActivityCreateAttributes{
-				ActivityType: ActivityTypeUnassignDevices,
-			},
-			Relationships: OrgDeviceActivityCreateRelationships{
-				MDMServer: &OrgDeviceActivityMDMServerRelationship{
-					Data: OrgDeviceActivityMDMServerLinkage{
-						Type: "mdmServers",
-						ID:   mdmServerID,
-					},
-				},
-				Devices: &OrgDeviceActivityDevicesRelationship{
-					Data: deviceLinkages,
-				},
-			},
-		},
+	endpoint := fmt.Sprintf(constants.EndpointOrgDeviceActivities+"/%s", activityID)
+
+	params := s.client.QueryBuilder()
+	if len(opts.Fields) > 0 {
+		params.AddStringSlice("fields[orgDeviceActivities]", opts.Fields)
 	}
 
 	var result ResponseOrgDeviceActivity
@@ -411,13 +391,71 @@ func (s *DeviceManagement) UnassignDevicesV1(ctx context.Context, mdmServerID st
 	resp, err := s.client.NewRequest(ctx).
 		SetHeader("Accept", constants.ApplicationJSON).
 		SetHeader("Content-Type", constants.ApplicationJSON).
-		SetBody(request).
+		SetQueryParams(params.Build()).
 		SetResult(&result).
-		Post(constants.EndpointOrgDeviceActivities)
+		Get(endpoint)
 
 	if err != nil {
 		return nil, resp, err
 	}
 
 	return &result, resp, nil
+}
+
+// AssignDevicesV1 assigns devices to an MDM server.
+// URL: POST https://api-business.apple.com/v1/orgDeviceActivities
+// https://developer.apple.com/documentation/applebusinessapi/create-an-orgdeviceactivity
+func (s *DeviceManagement) AssignDevicesV1(ctx context.Context, mdmServerID string, deviceIDs []string) (*ResponseOrgDeviceActivity, *resty.Response, error) {
+	if mdmServerID == "" {
+		return nil, nil, fmt.Errorf("MDM server ID is required")
+	}
+
+	return s.CreateOrgDeviceActivityV1(ctx, &OrgDeviceActivityCreateRequest{
+		Data: OrgDeviceActivityData{
+			Type: ResourceTypeOrgDeviceActivities,
+			Attributes: OrgDeviceActivityCreateAttributes{
+				ActivityType: ActivityTypeAssignDevices,
+			},
+			Relationships: OrgDeviceActivityCreateRelationships{
+				MDMServer: &OrgDeviceActivityMDMServerRelationship{
+					Data: OrgDeviceActivityMDMServerLinkage{
+						Type: ResourceTypeMDMServers,
+						ID:   mdmServerID,
+					},
+				},
+				Devices: &OrgDeviceActivityDevicesRelationship{
+					Data: deviceLinkages(deviceIDs),
+				},
+			},
+		},
+	})
+}
+
+// UnassignDevicesV1 unassigns devices from an MDM server.
+// URL: POST https://api-business.apple.com/v1/orgDeviceActivities
+// https://developer.apple.com/documentation/applebusinessapi/create-an-orgdeviceactivity
+func (s *DeviceManagement) UnassignDevicesV1(ctx context.Context, mdmServerID string, deviceIDs []string) (*ResponseOrgDeviceActivity, *resty.Response, error) {
+	if mdmServerID == "" {
+		return nil, nil, fmt.Errorf("MDM server ID is required")
+	}
+
+	return s.CreateOrgDeviceActivityV1(ctx, &OrgDeviceActivityCreateRequest{
+		Data: OrgDeviceActivityData{
+			Type: ResourceTypeOrgDeviceActivities,
+			Attributes: OrgDeviceActivityCreateAttributes{
+				ActivityType: ActivityTypeUnassignDevices,
+			},
+			Relationships: OrgDeviceActivityCreateRelationships{
+				MDMServer: &OrgDeviceActivityMDMServerRelationship{
+					Data: OrgDeviceActivityMDMServerLinkage{
+						Type: ResourceTypeMDMServers,
+						ID:   mdmServerID,
+					},
+				},
+				Devices: &OrgDeviceActivityDevicesRelationship{
+					Data: deviceLinkages(deviceIDs),
+				},
+			},
+		},
+	})
 }

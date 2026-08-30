@@ -53,6 +53,9 @@ func (m *DeviceManagementMock) RegisterMocks() {
 	// Seed with default test MDM server
 	m.seedTestMDMServer()
 
+	// Seed with a COMPLETED org device activity
+	m.seedTestOrgDeviceActivity()
+
 	// GET /mdmServers - List device management services
 	httpmock.RegisterResponder("GET", "https://api-business.apple.com/v1/mdmServers", func(req *http.Request) (*http.Response, error) {
 		mockState.Lock()
@@ -264,12 +267,8 @@ func (m *DeviceManagementMock) RegisterMocks() {
 		}
 
 		// Choose appropriate response based on activity type
-		var mockFile string
-		if activityType == "ASSIGN_DEVICES" {
-			mockFile = "validate_assign_devices_response.json"
-		} else if activityType == "UNASSIGN_DEVICES" {
-			mockFile = "validate_unassign_devices_response.json"
-		} else {
+		mockFile, ok := activityResponseFixtures[activityType]
+		if !ok {
 			return httpmock.NewStringResponse(400, `{"errors":[{"status":"400","code":"BAD_REQUEST","title":"Bad Request","detail":"Invalid activityType"}]}`), nil
 		}
 
@@ -284,8 +283,75 @@ func (m *DeviceManagementMock) RegisterMocks() {
 			return httpmock.NewStringResponse(500, `{"errors":[{"status":"500","code":"INTERNAL_ERROR","title":"Internal Server Error","detail":"Failed to parse mock data"}]}`), nil
 		}
 
+		// Record the activity so GET /orgDeviceActivities/{id} can read it back
+		if activity, ok := responseObj["data"].(map[string]any); ok {
+			if id, ok := activity["id"].(string); ok {
+				mockState.Lock()
+				mockState.deviceActivities[id] = activity
+				mockState.Unlock()
+			}
+		}
+
 		return httpmock.NewJsonResponse(201, responseObj)
 	})
+
+	// GET /orgDeviceActivities/{id} - Get organization device activity information
+	httpmock.RegisterResponder("GET", `=~^https://api-business\.apple\.com/v1/orgDeviceActivities/[^/]+$`, func(req *http.Request) (*http.Response, error) {
+		parts := splitPath(req.URL.Path)
+		activityID := parts[len(parts)-1]
+
+		mockState.Lock()
+		activity, exists := mockState.deviceActivities[activityID]
+		mockState.Unlock()
+
+		if !exists {
+			return httpmock.NewStringResponse(404, `{"errors":[{"status":"404","code":"RESOURCE_NOT_FOUND","title":"Resource Not Found","detail":"The requested resource was not found"}]}`), nil
+		}
+
+		return httpmock.NewJsonResponse(200, map[string]any{
+			"data": activity,
+			"links": map[string]any{
+				"self": "https://api-business.apple.com/v1/orgDeviceActivities/" + activityID,
+			},
+		})
+	})
+}
+
+// activityResponseFixtures maps an orgDeviceActivities activityType to the fixture
+// used for its create response.
+var activityResponseFixtures = map[string]string{
+	"ASSIGN_DEVICES":   "validate_assign_devices_response.json",
+	"UNASSIGN_DEVICES": "validate_unassign_devices_response.json",
+	"ASSIGN_DEVICES_WITH_MDM_MIGRATION_DEADLINE": "validate_create_mdm_migration_activity_response.json",
+	"UPDATE_MDM_MIGRATION_DEADLINE":              "validate_create_mdm_migration_activity_response.json",
+	"CANCEL_MDM_MIGRATION":                       "validate_create_mdm_migration_activity_response.json",
+	"RELEASE_DEVICES":                            "validate_release_devices_response.json",
+}
+
+// SeededOrgDeviceActivityID is the ID of the COMPLETED activity seeded by RegisterMocks,
+// for tests that need to read back a finished activity.
+const SeededOrgDeviceActivityID = "a0000000-1111-2222-3333-444444444444"
+
+// seedTestOrgDeviceActivity seeds a COMPLETED org device activity into the mock state.
+func (m *DeviceManagementMock) seedTestOrgDeviceActivity() {
+	mockData, err := loadMockResponse("validate_get_org_device_activity_information.json")
+	if err != nil {
+		return
+	}
+
+	var responseObj map[string]any
+	if err := json.Unmarshal(mockData, &responseObj); err != nil {
+		return
+	}
+
+	activity, ok := responseObj["data"].(map[string]any)
+	if !ok {
+		return
+	}
+
+	mockState.Lock()
+	defer mockState.Unlock()
+	mockState.deviceActivities[SeededOrgDeviceActivityID] = activity
 }
 
 // RegisterErrorMocks registers mock responders that return error responses

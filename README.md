@@ -44,13 +44,17 @@ Complete implementation of the [Apple Business Manager API](https://developer.ap
 - Get organization devices with filtering and pagination
 - Get detailed device information by serial number
 - Support for all device types (iPhone, iPad, Mac, Apple TV, Apple Watch)
+- Device management service migration attributes (`isMdmMigrationCapable`, `mdmMigrationStatus`, `mdmMigrationDeadlineDateTime`)
 
 **Device Management Services API:**
 - List device management services in an organization
+- Create, read, update and delete device management services
 - Get device serial numbers assigned to services
 - Assign/unassign devices to/from management services
 - Get device management service assignments and information
-- Track device activity operations
+- Schedule, update and cancel a device management service migration — move managed devices between services without erasing them
+- Release devices from the organization
+- Poll organization device activities to completion, including the CSV activity log
 
 **Key Features:**
 - JWT authentication — built-in Apple JWT token generation and management
@@ -369,7 +373,8 @@ The [examples directory](./examples) contains a runnable `main.go` for every SDK
 examples/
 ├── axm/                         Apple Business Manager
 │   ├── devices/
-│   └── devicemanagement/
+│   └── devicemanagement/        includes MDM migration, device release
+│                                and activity polling
 ├── device_management/           Apple MDM / DDM config generation
 │   ├── commands/                MDM command plists
 │   ├── profiles/                .mobileconfig profiles

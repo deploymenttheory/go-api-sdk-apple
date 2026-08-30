@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/deploymenttheory/go-sdk-appleservices/axm/client"
 	"github.com/deploymenttheory/go-sdk-appleservices/axm/axm_api/devices/mocks"
+	"github.com/deploymenttheory/go-sdk-appleservices/axm/client"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -460,6 +460,11 @@ func TestComprehensiveFieldCoverage(t *testing.T) {
 			FieldPurchaseSourceId,
 			FieldPurchaseSourceType,
 			FieldAssignedServer,
+			FieldAppleCareCoverage,
+			FieldReleasedFromOrgDateTime,
+			FieldIsMdmMigrationCapable,
+			FieldMdmMigrationStatus,
+			FieldMdmMigrationDeadlineDateTime,
 		},
 	}
 
@@ -733,4 +738,55 @@ func TestAppleCareStatusConstants(t *testing.T) {
 	assert.Equal(t, "NONE", PaymentTypeNone)
 	assert.Equal(t, "SUBSCRIPTION", PaymentTypeSubscription)
 	assert.Equal(t, "ABE_SUBSCRIPTION", PaymentTypeABESubscription)
+}
+
+// ====== DEVICE MANAGEMENT SERVICE MIGRATION TESTS ======
+
+// TestGetDeviceInformation_MigrationAttributes verifies the device management service
+// migration attributes added in Apple School Manager API 1.6 / Apple Business API 2.3
+// decode correctly.
+func TestGetDeviceInformation_MigrationAttributes(t *testing.T) {
+	client := setupMockClient(t)
+	mockHandler := &mocks.OrgDevicesMock{}
+	mockHandler.RegisterMocks()
+	defer mockHandler.CleanupMockState()
+
+	ctx := context.Background()
+	result, resp, err := client.GetByDeviceIDV1(ctx, "XABC123X0ABC123X0", &RequestQueryOptions{
+		Fields: []string{
+			FieldIsMdmMigrationCapable,
+			FieldMdmMigrationStatus,
+			FieldMdmMigrationDeadlineDateTime,
+		},
+	})
+
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	assert.Equal(t, 200, resp.StatusCode())
+	require.NotNil(t, result)
+
+	attrs := result.Data.Attributes
+	require.NotNil(t, attrs)
+	assert.True(t, attrs.IsMdmMigrationCapable)
+	assert.Equal(t, MdmMigrationStatusRequested, attrs.MdmMigrationStatus)
+	require.NotNil(t, attrs.MdmMigrationDeadlineDateTime)
+	assert.Equal(t,
+		time.Date(2026, 3, 15, 17, 0, 0, 0, time.UTC),
+		attrs.MdmMigrationDeadlineDateTime.UTC(),
+	)
+}
+
+func TestMdmMigrationStatusConstants(t *testing.T) {
+	assert.Equal(t, "REQUESTED", MdmMigrationStatusRequested)
+	assert.Equal(t, "STARTED", MdmMigrationStatusStarted)
+	assert.Equal(t, "SUCCESS", MdmMigrationStatusSuccess)
+	assert.Equal(t, "FAILED", MdmMigrationStatusFailed)
+}
+
+func TestMigrationAndReleaseFieldConstants(t *testing.T) {
+	assert.Equal(t, "isMdmMigrationCapable", FieldIsMdmMigrationCapable)
+	assert.Equal(t, "mdmMigrationStatus", FieldMdmMigrationStatus)
+	assert.Equal(t, "mdmMigrationDeadlineDateTime", FieldMdmMigrationDeadlineDateTime)
+	assert.Equal(t, "releasedFromOrgDateTime", FieldReleasedFromOrgDateTime)
+	assert.Equal(t, "appleCareCoverage", FieldAppleCareCoverage)
 }
