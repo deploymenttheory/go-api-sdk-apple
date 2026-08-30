@@ -38,7 +38,7 @@ Complete implementation of the [iTunes Search API](https://performance-partners.
 
 ### Apple Business Manager / Apple School Manager API
 
-Complete implementation of the [Apple Business Manager API](https://developer.apple.com/documentation/applebusinessmanagerapi):
+Complete implementation of the [Apple Business Manager API](https://developer.apple.com/documentation/apple-school-and-business-manager-api):
 
 **Devices API:**
 - Get organization devices with filtering and pagination
