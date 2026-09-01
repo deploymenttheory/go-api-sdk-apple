@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Features
+
+* **notary:** add S3 upload and end-to-end `SubmitAndWait` workflow. The notary service can now notarize a file from hash to verdict in one call: it submits the software, uploads it to the S3 bucket Apple hands out (AWS Signature Version 4, standard-library only, no AWS SDK dependency), polls for the verdict, and fetches and parses the developer log on a rejection. A new `notary/upload` package holds the stand-alone SigV4 uploader, and `examples/notary/` shows the flow.
+
 ## [0.9.0](https://github.com/deploymenttheory/go-sdk-appleservices/compare/v0.8.1...v0.9.0) (2026-08-30)
 
 

@@ -11,6 +11,7 @@ A collection of Go SDKs for interacting with Apple API services, device manageme
 - **Apple Device Management (MDM / DDM)** — typed, spec-validated construction of MDM command plists, configuration profiles and Declarative Device Management JSON, generated from [apple/device-management](https://github.com/apple/device-management)
 - **Apple Update CDN** — firmware discovery and IPSW download for macOS, iOS, and iPadOS
 - **Microsoft Updates** — macOS standalone app updates, Edge channels, OneDrive rings, App Store versions, and Office CVE history
+- **Apple Notary API**: submit software for notarization, upload it to Apple's S3 bucket, and poll for the verdict and log
 
 ## Features
 
@@ -365,6 +366,64 @@ func main() {
 
 ---
 
+### Apple Notary API
+
+Complete implementation of the [Apple Notary API](https://developer.apple.com/documentation/notaryapi) for notarizing macOS software:
+
+- Submit software for notarization with App Store Connect API key (JWT) authentication
+- Upload the file to the S3 bucket Apple hands out, signed with AWS Signature Version 4 (single PUT and multipart, standard-library only, no AWS SDK dependency)
+- Poll for the verdict, with configurable interval and timeout
+- Fetch and parse the developer log when a submission is not accepted
+- Optional webhook notification so a job need not sit and poll
+
+`SubmitAndWait` drives the whole flow, hash to verdict, in one call:
+
+```go
+package main
+
+import (
+    "context"
+    "errors"
+    "fmt"
+    "log"
+
+    "github.com/deploymenttheory/go-sdk-appleservices/notary"
+)
+
+func main() {
+    c, err := notary.NewClientFromEnv() // APPLE_KEY_ID, APPLE_ISSUER_ID, APPLE_PRIVATE_KEY_PATH
+    if err != nil {
+        log.Fatalf("Failed to create client: %v", err)
+    }
+
+    ctx := context.Background()
+    res, err := c.SubmitAndWait(ctx, notary.SubmitInput{
+        FilePath: "./MyApp.pkg",
+        Name:     "MyApp.pkg",
+        UploadProgress: func(written, total int64) {
+            fmt.Printf("\ruploaded %d/%d bytes", written, total)
+        },
+    }, notary.WaitOptions{})
+
+    if errors.Is(err, notary.ErrRejected) {
+        fmt.Printf("\nnotarization was not accepted: %s\n", res.Status.Status)
+        for _, issue := range res.Issues {
+            fmt.Printf("  [%s] %s (%s)\n", issue.Severity, issue.Message, issue.Path)
+        }
+        log.Fatal("rejected")
+    }
+    if err != nil {
+        log.Fatalf("\nnotarization failed: %v", err)
+    }
+
+    fmt.Printf("\naccepted: submission %s\n", res.SubmissionID)
+}
+```
+
+The individual steps are exported too: `notary.FileSHA256`, the four `c.NotaryAPI.Submissions` REST calls, `notary.Wait`, `notary.FetchLog`, and `notary.ParseLogIssues`. The stand-alone AWS SigV4 uploader lives in `notary/upload`.
+
+---
+
 ## Examples
 
 The [examples directory](./examples) contains a runnable `main.go` for every SDK function:
@@ -384,6 +443,8 @@ examples/
 │   ├── gdmf/                    Apple signed-version feed
 │   └── cdn/                     URL parsing, metadata, download
 ├── itunes_search/               iTunes Search API
+├── notary/                      Apple Notary API
+│   └── submit_and_wait/         end-to-end submit, upload, poll
 └── microsoft_updates/           Microsoft Updates
     ├── standalone/              CDN app versions (production/beta/preview)
     ├── edge/                    Edge channel versions
