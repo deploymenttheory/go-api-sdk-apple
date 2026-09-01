@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0](https://github.com/deploymenttheory/go-sdk-appleservices/compare/v0.9.0...v0.10.0) (2026-09-01)
+
+
+### Features
+
+* **notary:** add S3 upload and end-to-end SubmitAndWait workflow ([89d1a00](https://github.com/deploymenttheory/go-sdk-appleservices/commit/89d1a0036978e883c67ef1812df682a79fa4910a))
+* **notary:** add S3 upload and end-to-end SubmitAndWait workflow ([5fe5804](https://github.com/deploymenttheory/go-sdk-appleservices/commit/5fe580468426675def6a22a3f96f073580e80ea7))
+
 ## [Unreleased]
 
 ### Features
